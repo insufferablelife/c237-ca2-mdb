@@ -85,6 +85,53 @@ app.get('/logout', (req, res) => {
   });
 });
 
+// Update
+app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
+    const movieId = req.params.id;
+    const sql = 'SELECT * FROM movies WHERE movieId = ?';
+    connection.query(sql , [movieId], (error, results) => {
+        if (error) throw error;
+
+        if (results.length > 0) {
+            res.render('updateMovie', { movie: results[0] });
+        } else {
+            res.status(404).send('Movie not found');
+        }
+    });
+});
+app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
+    const movietId = req.params.id;
+    const { name, year, rating } = req.body;
+    let image  = req.body.currentImage; 
+    if (req.file) { 
+        image = req.file.filename; 
+    };
+
+    const sql = 'UPDATE movies SET name = ? , year = ?, rating = ?, image =? WHERE movieId = ?';
+    connection.query(sql, [name, year, rating, image, movietId], (error, results) => {
+        if (error) {
+            console.error("Error updating Movie:", error);
+            res.status(500).send('Error updating Movie');
+        } else {
+            res.redirect('/MovieList');
+        }
+    });
+});
+
+//Delete
+app.get('/deleteMovie/:id', (req, res) => {
+    const productId = req.params.id;
+
+    connection.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
+        if (error) {
+            console.error("Error deleting Movie:", error);
+            res.status(500).send('Error deleting Movie');
+        } else {
+            res.redirect('/MovieList');
+        }
+    });
+});
+
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => {
