@@ -108,7 +108,7 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
     };
 
     const sql = 'UPDATE movies SET name = ? , year = ?, rating = ?, image =? WHERE movieId = ?';
-    connection.query(sql, [name, year, rating, image, movietId], (error, results) => {
+    connection.query(sql, [name, year, rating, image, movieId], (error, results) => {
         if (error) {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
@@ -120,7 +120,7 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
 
 //Delete
 app.get('/deleteMovie/:id', (req, res) => {
-    const productId = req.params.id;
+    const movieId = req.params.id;
 
     connection.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
         if (error) {
