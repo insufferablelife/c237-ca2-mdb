@@ -1,0 +1,92 @@
+const express = require('express');
+const session = require('express-session');
+const mysql = require('mysql2');
+const path = require('path');
+
+const app = express();
+
+// DB connection
+const db = mysql.createConnection({
+  host: '45-zxi.h.filess.io',
+  user: 'c237ca2mdb_parentfirm',
+  password: '31dd640ff0e2f511ec52c95260c99c4725c046b3',
+  database: '`c237ca2mdb_parentfirm`',
+});
+
+db.connect(err => {
+  if (err) {
+    console.error('DB connection error:', err);
+  } else {
+    console.log('DB connected');
+  }
+});
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'your_secret_key',
+  saveUninitialized: true,
+}));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Routes
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+// Register page
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+// Handle register
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
+  db.query(query, [username, password], (err) => {
+    if (err) {
+      return res.send('Registration failed — username might exist.');
+    }
+    res.redirect('/login');
+  });
+});
+
+// Login page
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// Handle login
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+  db.query(query, [username, password], (err, results) => {
+    if (err || results.length === 0) {
+      return res.send('Invalid username or password.');
+    }
+    req.session.user = results[0];
+    res.redirect('/dashboard');
+  });
+});
+
+// Dashboard page (protected)
+app.get('/dashboard', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  res.render('dashboard', { user: req.session.user });
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/login');
+  });
+});
+
+// Start server
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
