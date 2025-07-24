@@ -85,6 +85,31 @@ app.get('/logout', (req, res) => {
   });
 });
 
+// Add Movie
+app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
+    res.render('addProduct', {user: req.session.user } ); 
+});
+
+app.post('/addMovie', upload.single('image'),  (req, res) => {
+    const { name, rating, date} = req.body;
+    let image;
+    if (req.file) {
+        image = req.file.filename;
+    } else {
+        image = null;
+    }
+
+    const sql = 'INSERT INTO movie (name, rating, date, image) VALUES (?, ?, ?, ?)';
+    connection.query(sql , [name, rating, date, image], (error, results) => {
+        if (error) {
+            console.error("Error adding movie:", error);
+            res.status(500).send('Error adding movie');
+        } else {
+            res.redirect('/movieList');
+        }
+    });
+});
+
 // Update
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
     const movieId = req.params.id;
