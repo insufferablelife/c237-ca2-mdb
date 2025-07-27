@@ -10,7 +10,8 @@ const db = mysql.createConnection({
   host: '45-zxi.h.filess.io',
   user: 'c237ca2mdb_parentfirm',
   password: '31dd640ff0e2f511ec52c95260c99c4725c046b3',
-  database: '`c237ca2mdb_parentfirm`',
+  database: 'c237ca2mdb_parentfirm',
+  port: '3307'
 });
 
 db.connect(err => {
@@ -30,10 +31,29 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware functions
+function checkAuthenticated(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
+function checkAdmin(req, res, next) {
+  if (req.session.user && req.session.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).send('Access denied. Admins only.');
+  }
+}
+
+
 // Routes
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', { user: req.session.user });
 });
+
 
 // Register page
 app.get('/register', (req, res) => {
@@ -85,6 +105,19 @@ app.get('/logout', (req, res) => {
   });
 });
 
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'public', 'uploads'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
 // Add Movie
 app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
     res.render('addProduct', {user: req.session.user } ); 
@@ -132,13 +165,13 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
         image = req.file.filename; 
     };
 
-    const sql = 'UPDATE movies SET name = ? , date = ?, rating = ?, image =? WHERE movieId = ?';
-    connection.query(sql, [name, date, rating, image, movieId], (error, results) => {
+    const sql = 'UPDATE movies SET name = ? , year = ?, rating = ?, image =? WHERE movieId = ?';
+    connection.query(sql, [name, year, rating, image, movieId], (error, results) => {
         if (error) {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
-            res.redirect('/movieList');
+            res.redirect('/MovieList');
         }
     });
 });
@@ -152,7 +185,7 @@ app.get('/deleteMovie/:id', (req, res) => {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
         } else {
-            res.redirect('/movieList');
+            res.redirect('/MovieList');
         }
     });
 });
