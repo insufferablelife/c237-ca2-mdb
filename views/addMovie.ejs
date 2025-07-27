@@ -42,8 +42,14 @@
       </div>
 
       <div class="mb-3">
-        <label for="rating" class="form-label">Rating</label>
-        <input type="number" class="form-control" id="rating" name="rating" min="0" step="1" required>
+          <label for="rating">Rating:</label>
+          <select id="rating" name="rating" class="form-control" required>
+              <option value="one" <% if (formData && formData.role === 'one') { %> selected <% } %>>1 ⭐</option>
+              <option value="two" <% if (formData && formData.role === 'two') { %> selected <% } %>>2 ⭐</option>
+              <option value="three" <% if (formData && formData.role === 'three') { %> selected <% } %>>3 ⭐</option>
+              <option value="four" <% if (formData && formData.role === 'four') { %> selected <% } %>>4 ⭐</option>
+              <option value="five" <% if (formData && formData.role === 'five') { %> selected <% } %>>5 ⭐</option>
+          </select>
       </div>
 
       <div class="mb-3">
