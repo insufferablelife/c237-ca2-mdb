@@ -120,7 +120,7 @@ const upload = multer({ storage: storage });
 
 // Add Movie
 app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
-    res.render('addProduct', {user: req.session.user } ); 
+    res.render('addMovie', {user: req.session.user } ); 
 });
 
 app.post('/addMovie', upload.single('image'),  (req, res) => {
