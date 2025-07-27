@@ -132,13 +132,13 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
         image = req.file.filename; 
     };
 
-    const sql = 'UPDATE movies SET name = ? , year = ?, rating = ?, image =? WHERE movieId = ?';
-    connection.query(sql, [name, year, rating, image, movieId], (error, results) => {
+    const sql = 'UPDATE movies SET name = ? , date = ?, rating = ?, image =? WHERE movieId = ?';
+    connection.query(sql, [name, date, rating, image, movieId], (error, results) => {
         if (error) {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
@@ -152,7 +152,7 @@ app.get('/deleteMovie/:id', (req, res) => {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
