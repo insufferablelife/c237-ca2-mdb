@@ -183,7 +183,7 @@ app.get('/movieList', (req, res) => {
   res.render('movieList', { user: req.session.user });
 });
 
-const multer = require('multer');
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
