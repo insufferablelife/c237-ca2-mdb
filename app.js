@@ -86,16 +86,16 @@ app.post('/login', (req, res) => {
       return res.send('Invalid username or password.');
     }
     req.session.user = results[0];
-    res.redirect('/dashboard');
+    res.redirect('/movieList');
   });
 });
 
-// Dashboard page (protected)
-app.get('/dashboard', (req, res) => {
+// Movie List page (protected)
+app.get('/movieList', (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  res.render('dashboard', { user: req.session.user });
+  res.render('movieList', { user: req.session.user });
 });
 
 // Logout
