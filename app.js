@@ -1,7 +1,10 @@
 const express = require('express');
 const session = require('express-session');
+const flash = require('connect-flash');
 const mysql = require('mysql2');
 const path = require('path');
+const multer = require('multer');
+
 
 const app = express();
 
@@ -24,12 +27,26 @@ db.connect(err => {
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
   secret: 'your_secret_key',
-  saveUninitialized: true,
+  resave: false,               
+  saveUninitialized: true
 }));
+
+app.use(require('connect-flash')());
+
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
 
 
 // Routes
