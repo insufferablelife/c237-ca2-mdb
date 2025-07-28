@@ -67,6 +67,16 @@ const checkAdmin = (req, res, next) => {
     }
 };
 
+// yow sun - terminated screen
+const checkTermed = (req, res, next) => {
+    if (req.session.user.isBanned === '0') {
+        return next();
+    } else {
+        req.flash('error', 'Your account has been terminated.');
+        res.redirect('/banned');
+    }
+};
+
 const validateRegistration = (req, res, next) => {
     const { username, email, password, phone} = req.body;
 
@@ -210,7 +220,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
     });
 });
 app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
-    const movietId = req.params.id;
+    const movieId = req.params.id;
     const { name, year, rating } = req.body;
     let image  = req.body.currentImage; 
     if (req.file) { 
