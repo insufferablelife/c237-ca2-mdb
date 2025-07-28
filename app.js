@@ -270,6 +270,21 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
     });
 });
 
+// yow sun - ban user
+app.post('/banUser/:id', (req, res) => {
+    const userId = req.params.id;
+
+    const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
+    connection.query(sql, [userId], (error, results) => {
+        if (error) {
+            console.error("Error banning user:", error);
+            res.status(500).send('Error banning user');
+        } else {
+            res.redirect('/userList');
+        }
+    });
+});
+
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => {
