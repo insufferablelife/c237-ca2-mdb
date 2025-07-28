@@ -8,48 +8,150 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Funny MDB</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav">
-            <% if (!user) {%>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li> 
-                <li class="nav-item">
-                    <a class="nav-link" href="/Login">Login</a>
-                </li> 
-            <% } else { %>
-                <li class="nav-item">
-                    <a class="nav-link" href="/Logout">Logout</a>
-                </li> 
-            <% } %>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-        <p style="text-align: center;">
-            <% if (user) {%>
-              <% if (user.role === "admin") { %>
-                <br>
-                Back to <a href="/inventory">inventory!</a>
-              <% } else { %>
-                <br>
-                Continue <a href="/shopping">Shopping!</a>
-                <% } %>
-            <% } else { %>
-            <br>
-            Welcome to Funny MDB <br>
-            Please <a href = "/login" >login</a> to continue...
-            <% } %>
-        </p>
-        
+<h1>Where we bring you da best of DA best movies SINCE 2319 BCE!!!!!</h1>
+    <p>From Africa, Korea, USA, we have it ALL!!!!!</p>
+    <br>
+    <h3>Here are some testimonies from famous celebrities</h3>
     </div>
+<div class="container mt-4">
+    <div class="row justify-content-center gx-4 gy-4">
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card bg-dark text-white" style="width: 100%;">
+                <img class="card-img-top" src="images/chicken8.png" alt="wow">
+                <div class="card-body">
+                    <h4 class="card-title">Chicken</h4>
+                    <p class="card-text fw-lighter">10/10</p>
+                    <button type="button" class="btn btn-primary btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#chicken">
+                        View Testimony
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card bg-dark text-white" style="width: 100%;">
+                <img class="card-img-top" src="images/nixon.jpg" alt="wow">
+                <div class="card-body">
+                    <h4 class="card-title">Richard Nixon</h4>
+                    <p class="card-text fw-lighter">10/10</p>
+                    <button type="button" class="btn btn-primary btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#nixon">
+                        View Testimony
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card bg-dark text-white" style="width: 100%;">
+                <img class="card-img-top" src="images/bobmarley.jpg" alt="wow">
+                <div class="card-body">
+                    <h4 class="card-title">Bob Marley</h4>
+                    <p class="card-text fw-lighter">10/10</p>
+                    <button type="button" class="btn btn-primary btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#bobmarley">
+                        View Testimony
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<img src="images/miku.gif" type="image/gif" alt="hi">
+    <div align="center">
+        <h1>DA MOVIES ARE WAITING!!!! (4 DA RATINGZ!!)</h1>
+        <img src="images/grandma4.png" alt="lmaoooo">
+        <h3>THIS AIN'T YOUR GRANDMA'S WEBSITE</h3>
+        <a href="/movies" class="btn btn-primary btn-lg btn-block">
+            CLICK HERE 4 ACTION-PACKED MOVIES
+        </a>
+        <br></br>
+        <a href="/addMovie" class="btn btn-primary btn-lg btn-block">
+            GIVE US SUGGESTIONS!!!! 
+        </a>
+        <p class="font-weight-light">However, if you are a senior citizen, there is thing called a Bootstrap Navbar where you click to navigate the document.</p>
+    </div>
+<h2 align="center">
+  <img src="/images/abbasbaloch_home_browser.gif" /> <img src="/images/Area51_4794_gc_icon.gif" /> <img src="/images/ar.geocities.com_uap_c1b_any_html4_browser.png" />
+  <br> <!--I love geocities!-->
+  <img src="/images/Area51_Dimension_1248_smile.gif" />
+</h2>
+
+        <div class="modal fade" id="chicken" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="chickenLabel">The Chicken in my Backyard</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div align="center">
+                    <img src="images/chicken8.png" alt="wow" width="200" height="213">
+                </div>
+                <div class="modal-body fw-lighter">
+                    Rating: 10/10
+                </div>
+                <div class="modal-body">
+                    cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck 
+                    cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck 
+                    cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck 
+                    cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck cluck 
+                    Cluck, 10/10
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cluck</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="nixon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="nixonLabel">Richard Nixon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div align="center">
+                    <img src="images/nixon.jpg" alt="wow" width="160" height="213">
+                </div>
+                <div class="modal-body fw-lighter">
+                    Rating: 10/10
+                </div>
+                <div class="modal-body">
+                    I shall leave this office with regret at not completing my term,
+                    but with gratitude for the privilege of serving as your President for the past 5 1/2 years.
+                    These years have been a momentous time in the history of our Nation and the world.
+                    They have been a time of achievement in which we can all be proud, achievements that represent the shared efforts of the Administration, the Congress, and the people.
+                    Overall, 10/10
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+        </body>
+
+        <div class="modal fade" id="bobmarley" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="bobmarleyLabel">Bob Marley</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div align="center">
+                    <img src="images/bobmarley.jpg" alt="wow" width="152" height="200">
+                </div>
+                <div class="modal-body fw-lighter">
+                    Rating: 10/10
+                </div>
+                <div class="modal-body">
+                    This is so peak, can't wait to show this to my family!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
