@@ -223,7 +223,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
     });
 });
 
-// Update
+// Update -Zhafran
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
     const movieId = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieId = ?';
@@ -256,7 +256,7 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
     });
 });
 
-//Delete
+//Delete -Zhafran
 app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const movieId = req.params.id;
 
