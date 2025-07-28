@@ -67,6 +67,16 @@ const checkAdmin = (req, res, next) => {
     }
 };
 
+// yow sun - terminated screen
+const checkTermed = (req, res, next) => {
+    if (req.session.user.isBanned === '0') {
+        return next();
+    } else {
+        req.flash('error', 'Your account has been terminated.');
+        res.redirect('/banned');
+    }
+};
+
 const validateRegistration = (req, res, next) => {
     const { username, email, password, phone} = req.body;
 
