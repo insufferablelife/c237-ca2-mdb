@@ -9,10 +9,15 @@
 <body>
   <div class="container mt-5">
     <a href="/" class="btn btn-se
-    condary mb-3">Back to Home</a>
+    condary mb-3">Home</a>
 
     <h2>Register</h2>
     <form action="/register" method="POST">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
         <input type="text" class="form-control" id="username" name="username" required>
@@ -29,9 +34,10 @@
       </div>
 
       <div class="mb-3">
-        <label for="birthday" class="form-label">Birthday (DD/MM/YYYY)</label>
-        <input type="text" class="form-control" id="birthday" name="birthday" placeholder="e.g. 31/12/2005" required>
+        <label for="birthday" class="form-label">Birthday</label>
+        <input type="date" class="form-control" id="birthday" name="birthday" required>
       </div>
+
 
       <div class="mb-3">
         <label for="gender" class="form-label">Gender</label>

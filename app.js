@@ -47,7 +47,6 @@ app.get('/movieList', (req, res) => {
 });
 
 //Login and Register-Yizhe
-// A - Basic Routes
 
 const checkAuthenticated = (req, res, next) => {
     if (req.session.user) {
@@ -78,9 +77,9 @@ const checkTermed = (req, res, next) => {
 };
 
 const validateRegistration = (req, res, next) => {
-    const { username, email, password, phone} = req.body;
+    const { name, username, password, email, birthday, gender} = req.body;
 
-    if (!username || !email || !password || !phone) {
+    if (!name || !username || !email || !password || !birthday || !gender) {
         return res.status(400).send('All fields are required.');
     }
     
@@ -103,9 +102,9 @@ app.get('/register', (req, res) => {
 });
 // Handle register
 app.post('/register', validateRegistration, (req, res) => {
-  const { username, email, password, phone } = req.body;
-  const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-  db.query(query, [username, email, password, phone], (err) => {
+  const { name, username, password, email, birthday, gender } = req.body;
+  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
+  db.query(query, [name, username, email, password, birthday, gender], (err) => {
     if (err) {
             throw err;
         }
