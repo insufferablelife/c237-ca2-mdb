@@ -121,7 +121,7 @@ app.get('/register', (req, res) => {
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
   const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
-  db.query(query, [name, username, email, password, birthday, gender], (err) => {
+  db.query(query, [name, username, password, email, birthday, gender], (err, result) => {
     if (err) {
             throw err;
         }
@@ -158,7 +158,7 @@ app.post('/login', (req, res) => {
     if (user.role === 'admin') {
       res.redirect('/admin');
     } else {
-      res.redirect('/dashboard');
+      res.redirect('/movielist');
     }
   });
 });
