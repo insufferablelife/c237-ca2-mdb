@@ -47,7 +47,7 @@ function checkAdmin(req, res, next) {
     res.status(403).send('Access denied. Admins only.');
   }
 }
-
+s
 
 // Routes
 app.get('/', (req, res) => {
@@ -63,7 +63,7 @@ app.get('/movieList', (req, res) => {
   });
 });
 
-
+//yizhe
 // Register page
 app.get('/register', (req, res) => {
   res.render('register');
@@ -80,7 +80,7 @@ app.post('/register', (req, res) => {
     res.redirect('/login');
   });
 });
-//yizhe
+
 // Login page
 app.get('/login', (req, res) => {
   res.render('login');
