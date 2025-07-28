@@ -54,6 +54,15 @@ app.get('/', (req, res) => {
   res.render('index', { user: req.session.user });
 });
 
+app.get('/movieList', (req, res) => {
+  db.query('SELECT * FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send("Database error");
+    }
+    res.render('movieList', { movies: results });
+  });
+});
+
 
 // Register page
 app.get('/register', (req, res) => {
