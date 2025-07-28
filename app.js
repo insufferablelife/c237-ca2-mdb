@@ -54,6 +54,15 @@ app.get('/', (req, res) => {
   res.render('index', { user: req.session.user });
 });
 
+app.get('/movieList', (req, res) => {
+  db.query('SELECT * FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send("Database error");
+    }
+    res.render('movieList', { movies: results });
+  });
+});
+
 
 // Register page
 app.get('/register', (req, res) => {
@@ -86,16 +95,16 @@ app.post('/login', (req, res) => {
       return res.send('Invalid username or password.');
     }
     req.session.user = results[0];
-    res.redirect('/dashboard');
+    res.redirect('/movieList');
   });
 });
 
-// Dashboard page (protected)
-app.get('/dashboard', (req, res) => {
+// Movie List page (protected)
+app.get('/movieList', (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  res.render('dashboard', { user: req.session.user });
+  res.render('movieList', { user: req.session.user });
 });
 
 // Logout
@@ -132,7 +141,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
         image = null;
     }
 
-    const sql = 'INSERT INTO movie (name, rating, date, image) VALUES (?, ?, ?, ?)';
+    const sql = 'INSERT INTO movies (name, rating, date, image) VALUES (?, ?, ?, ?)';
     connection.query(sql , [name, rating, date, image], (error, results) => {
         if (error) {
             console.error("Error adding movie:", error);
