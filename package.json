@@ -8,13 +8,21 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "CA2 Project: Movie Database",
   "dependencies": {
     "connect-flash": "^0.1.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
+    "express-session": "^1.18.2",
     "multer": "^2.0.2",
     "mysql2": "^3.14.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insufferablelife/c237-ca2-mdb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/insufferablelife/c237-ca2-mdb/issues"
+  },
+  "homepage": "https://github.com/insufferablelife/c237-ca2-mdb#readme"
 }
