@@ -132,7 +132,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
         image = null;
     }
 
-    const sql = 'INSERT INTO movie (name, rating, date, image) VALUES (?, ?, ?, ?)';
+    const sql = 'INSERT INTO movies (name, rating, date, image) VALUES (?, ?, ?, ?)';
     connection.query(sql , [name, rating, date, image], (error, results) => {
         if (error) {
             console.error("Error adding movie:", error);
