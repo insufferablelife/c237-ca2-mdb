@@ -239,7 +239,7 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
 });
 
 //Delete
-app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
+app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const movieId = req.params.id;
 
     connection.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
