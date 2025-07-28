@@ -71,7 +71,7 @@ app.post('/register', (req, res) => {
     res.redirect('/login');
   });
 });
-
+//yizhe
 // Login page
 app.get('/login', (req, res) => {
   res.render('login');
@@ -117,7 +117,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
+//
 // Add Movie
 app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
     res.render('addMovie', {user: req.session.user } ); 
