@@ -122,13 +122,15 @@ app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
   const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
   db.query(query, [name, username, password, email, birthday, gender], (err, result) => {
-    if (err) {
-            throw err;
-        }
-        console.log(result);
-        req.flash('success', 'Registration successful! Please log in.');
-        res.redirect('/login');
-    });
+     if (err) {
+       console.error('Error inserting into DB:', err);
+       return res.status(500).send('Database error');
+    }
+    console.log('User registered:', result);
+    req.flash('success', 'Registration successful! Please log in.');
+    res.redirect('/login');
+  });
+
 });
 
 // Login page
