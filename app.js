@@ -63,22 +63,63 @@ app.get('/movieList', (req, res) => {
   });
 });
 
-//yizhe
+//Login and Register-Yizhe
+// A - Basic Routes
+
+const checkAuthenticated = (req, res, next) => {
+    if (req.session.user) {
+        return next();
+    } else {
+        req.flash('error', 'Please log in to view this resource');
+        res.redirect('/login');
+    }
+};
+
+const checkAdmin = (req, res, next) => {
+    if (req.session.user.role === 'admin') {
+        return next();
+    } else {
+        req.flash('error', 'Access denied');
+        res.redirect('/dashboard');
+    }
+};
+
+const validateRegistration = (req, res, next) => {
+    const { username, email, password, phone} = req.body;
+
+    if (!username || !email || !password || !phone) {
+        return res.status(400).send('All fields are required.');
+    }
+    
+    if (password.length < 6) {
+        req.flash('error', 'Password should be at least 6 or more characters long');
+        req.flash('formData', req.body);
+        return res.redirect('/register');
+    }
+    next();
+};
+
+
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
 // Register page
 app.get('/register', (req, res) => {
   res.render('register');
 });
-
 // Handle register
-app.post('/register', (req, res) => {
-  const { username, password } = req.body;
+app.post('/register', validateRegistration, (req, res) => {
+  const { username, email, password, phone } = req.body;
   const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-  db.query(query, [username, password], (err) => {
+  db.query(query, [username, email, password, phone], (err) => {
     if (err) {
-      return res.send('Registration failed — username might exist.');
-    }
-    res.redirect('/login');
-  });
+            throw err;
+        }
+        console.log(result);
+        req.flash('success', 'Registration successful! Please log in.');
+        res.redirect('/login');
+    });
 });
 
 // Login page
@@ -89,15 +130,41 @@ app.get('/login', (req, res) => {
 // Handle login
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+  const query = 'SELECT * FROM users WHERE username = ? AND password = SHA1(?)';
+
   db.query(query, [username, password], (err, results) => {
     if (err || results.length === 0) {
-      return res.send('Invalid username or password.');
+      req.flash('error', 'Invalid username or password.');
+      return res.redirect('/login');
     }
-    req.session.user = results[0];
-    res.redirect('/movieList');
+
+    const user = results[0];
+    req.session.user = {
+      id: user.id,
+      username: user.username,
+      role: user.role
+    };
+
+    // Redirect based on role
+    if (user.role === 'admin') {
+      res.redirect('/admin');
+    } else {
+      res.redirect('/dashboard');
+    }
   });
 });
+
+
+// Logout
+app.get('/logout', (req, res) => {
+  req.session.destroy(() => res.redirect('/'));
+});
+
+app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
+  res.render('admin', {user : req.session.user });
+});
+
+
 
 // Movie List page (protected)
 app.get('/movieList', (req, res) => {
@@ -105,13 +172,6 @@ app.get('/movieList', (req, res) => {
     return res.redirect('/login');
   }
   res.render('movieList', { user: req.session.user });
-});
-
-// Logout
-app.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/login');
-  });
 });
 
 const multer = require('multer');
