@@ -220,7 +220,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
     });
 });
 app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
-    const movietId = req.params.id;
+    const movieId = req.params.id;
     const { name, year, rating } = req.body;
     let image  = req.body.currentImage; 
     if (req.file) { 
