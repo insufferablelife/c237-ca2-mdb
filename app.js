@@ -15,7 +15,8 @@ const db = mysql.createConnection({
   port: 3307
 });
 
-db.connect(err => {
+// Check connection with Database
+db.connect((err) => {
   if (err) {
     console.error('DB connection error:', err);
   } else {
@@ -23,28 +24,32 @@ db.connect(err => {
   }
 });
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
+//  Set up view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+//  enable static files
 app.use(express.static(path.join(__dirname, 'public')));
+// enable form processing
+app.use(express.urlencoded({ extended: false }));
 
+// Session Middleware
 app.use(session({
   secret: 'your_secret_key',
   resave: false,               
-  saveUninitialized: true
+  saveUninitialized: true,
+  // Session expires after 1 week of inactivity
+  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } 
 }));
 
-app.use(require('connect-flash')());
+app.use(flash());
 
 
+// Middleware
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
 });
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 
 
 // Routes
