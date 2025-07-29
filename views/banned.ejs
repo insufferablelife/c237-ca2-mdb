@@ -8,10 +8,37 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+    <!-- Navbar -->
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Movie</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/movieList">List of Movies</a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="/addMovie">Add New Movie</a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li> 
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
     <div align="center">
         <h1>Account Deleted.</h1>
         <br>
-        <h3>Our moderation team suspects your account is violating our Terms of Service.</h3>
+        <h3>Our moderation team suspects your have been violating our Terms of Service.</h3>
         <h2>You are not welcome to our platform. Your account has been deleted.</h2>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">I understand.</a>
+        </li> 
     </div>
 </body>
