@@ -3,9 +3,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const mysql = require('mysql2');
 const path = require('path');
-const multer = require('multer');
-
-
+const multer = require('multer'); 
 const app = express();
 
 // DB connection
@@ -14,10 +12,11 @@ const db = mysql.createConnection({
   user: 'c237ca2mdb_parentfirm',
   password: '31dd640ff0e2f511ec52c95260c99c4725c046b3',
   database: 'c237ca2mdb_parentfirm',
-  port: '3307'
+  port: 3307
 });
 
-db.connect(err => {
+// Check connection with Database
+db.connect((err) => {
   if (err) {
     console.error('DB connection error:', err);
   } else {
@@ -25,28 +24,32 @@ db.connect(err => {
   }
 });
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
+//  Set up view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+//  enable static files
 app.use(express.static(path.join(__dirname, 'public')));
+// enable form processing
+app.use(express.urlencoded({ extended: false }));
 
+// Session Middleware
 app.use(session({
   secret: 'your_secret_key',
   resave: false,               
-  saveUninitialized: true
+  saveUninitialized: true,
+  // Session expires after 1 week of inactivity
+  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } 
 }));
 
-app.use(require('connect-flash')());
+app.use(flash());
 
 
+// Middleware
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
 });
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 
 
 // Routes
