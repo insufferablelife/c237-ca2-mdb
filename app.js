@@ -164,14 +164,14 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
 //start page
 app.get('/', (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/login');
+    return res.redirect('/movieList');
   }
   res.render('index', { user: req.session.user });
 });
 
 app.get('/movieList', (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/movieList');
+    return res.redirect('/login');
   }
 
   db.query('SELECT * FROM movies', (err, results) => {
