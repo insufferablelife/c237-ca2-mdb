@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 
 
 //Login and Register - Yizhe
-// Middleware to check if user is logged in
+// See User Logged in ornot
 const checkAuthenticated = (req, res, next) => {
     if (req.session.user) {
         return next();
@@ -63,7 +63,7 @@ const checkAuthenticated = (req, res, next) => {
     }
 };
 
-// Middleware to check if user is admin
+//Check Whether is admin
 const checkAdmin = (req, res, next) => {
     if (req.session.user.role === 'admin') {
         return next();
