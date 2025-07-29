@@ -73,16 +73,6 @@ const checkAdmin = (req, res, next) => {
     }
 };
 
-// yow sun - terminated screen
-const checkTermed = (req, res, next) => {
-    if (req.session.user.isBanned === '0') {
-        return next();
-    } else {
-        req.flash('error', 'Your account has been terminated.');
-        res.redirect('/banned');
-    }
-};
-
 const validateRegistration = (req, res, next) => {
     const { name, username, password, email, birthday, gender} = req.body;
 
@@ -272,6 +262,18 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
         }
     });
 });
+
+
+
+// yow sun - terminated screen
+const checkTermed = (req, res, next) => {
+    if (req.session.user.isBanned === '0') {
+        return next();
+    } else {
+        req.flash('error', 'Your account has been terminated.');
+        res.redirect('/banned');
+    }
+};
 
 // yow sun - ban user
 app.post('/banUser/:id', (req, res) => {
