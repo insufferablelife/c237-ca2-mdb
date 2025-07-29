@@ -251,7 +251,7 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
@@ -265,7 +265,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
