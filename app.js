@@ -109,22 +109,6 @@ app.post('/register', validateRegistration, (req, res) => {
   });
 });
 
-// Define routes
-app.get('/', (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-  res.render('index', { user: req.session.user });
-});
-
-app.get('/movieList', (req, res) => {
-  db.query('SELECT * FROM movies', (err, results) => {
-    if (err) {
-      return res.status(500).send("Database error");
-    }
-    res.render('movieList', { movies: results });
-  });
-});
 
 // Login page
 app.get('/login', (req, res) => {
@@ -168,15 +152,31 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
+// Define routes
+//start page
+app.get('/', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  res.render('index', { user: req.session.user });
+});
 
-
-// Movie List page (protected)
 app.get('/movieList', (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
-  res.render('movieList', { user: req.session.user });
+
+  db.query('SELECT * FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send("Database error");
+    }
+    res.render('movieList', { 
+      movies: results,
+      user: req.session.user
+    });
+  });
 });
+
 
 
 
