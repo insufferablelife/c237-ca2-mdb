@@ -6,6 +6,18 @@ const path = require('path');
 const multer = require('multer'); 
 const app = express();
 
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'public', 'uploads')); // Directory to save uploaded files
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
 // DB connection
 const db = mysql.createConnection({
   host: 'c237-all.mysql.database.azure.com',
@@ -15,7 +27,6 @@ const db = mysql.createConnection({
   port: 3306
 });
 
-// Check connection with Database
 db.connect((err) => {
   if (err) {
     console.error('DB connection error:', err);
@@ -187,21 +198,9 @@ app.get('/movieList', checkAuthenticated, (req, res) => {
     });
   });
 });
-
-
-
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'public', 'uploads'));
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-
-const upload = multer({ storage: storage });
 //
+
+
 
 // Add Movie ~Raeann
 app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
