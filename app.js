@@ -126,7 +126,7 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const query = 'SELECT * FROM users WHERE username = ? AND password = SHA1(?)';
+  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
 
   db.query(query, [username, password], (err, results) => {
     if (err || results.length === 0) {
