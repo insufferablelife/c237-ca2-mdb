@@ -171,7 +171,7 @@ app.get('/', (req, res) => {
 
 app.get('/movieList', (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/login');
+    return res.redirect('/movieList');
   }
 
   db.query('SELECT * FROM movies', (err, results) => {
