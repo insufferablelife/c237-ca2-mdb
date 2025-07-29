@@ -73,6 +73,7 @@ const checkAdmin = (req, res, next) => {
     }
 };
 
+// Middleware for form validation
 const validateRegistration = (req, res, next) => {
     const { name, username, password, email, birthday, gender} = req.body;
 
@@ -97,6 +98,7 @@ app.get('/', (req, res) => {
 app.get('/register', (req, res) => {
   res.render('register');
 });
+
 // Handle register
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
