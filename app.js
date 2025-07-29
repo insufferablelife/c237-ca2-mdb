@@ -89,12 +89,13 @@ const validateRegistration = (req, res, next) => {
     next();
 };
 
+//   Define Routes
 // Register page
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', { messages: req.flash('error'), formData: req.flash('formData')[0] });
 });
 
-// Handle register
+// Handle registration
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
   const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
@@ -105,35 +106,33 @@ app.post('/register', validateRegistration, (req, res) => {
     console.log(result); 
     req.flash('success', 'Registration successful! Please log in.');
     res.redirect('/login');
-});
+  });
 });
 
 // Login page
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { messages: req.flash('success'), errors: req.flash('error') });
 });
 
 // Handle login
-app.get('/login', (req, res) => {
-  res.render('login', {
-    messages: {
-      error: req.flash('error'),
-      success: req.flash('success')
-    }
-  });
-});
-
-
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
 
+  // Validate username and password
+  if (!username || !password) {
+    req.flash('error', 'All fields are required.');
+    return res.redirect('/login'); 
+  }
+
+  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
   db.query(query, [username, password], (err, results) => {
+    // Error logging in OR Invalid login credentials
     if (err || results.length === 0) {
-      req.flash('error', 'Invalid username or password.');
+      req.flash('error', 'Failed login, invalid username or password.', err);
       return res.redirect('/login');
     }
 
+    // Creation of user.id, user.username, user.role for redirecting after login
     const user = results[0];
     req.session.user = {
       id: user.id,
@@ -141,27 +140,25 @@ app.post('/login', (req, res) => {
       role: user.role
     };
 
+    // Successful login
+    if (results.length > 0) {
+      req.flash('success', 'Login successful!');
     // Redirect based on role
-    if (user.role === 'admin') {
+      if (user.role === 'admin') {
       res.redirect('/admin');
-    } else {
+      } else {
       res.redirect('/movieList');
     }
+  }
   });
 });
-
 
 // Logout
 app.get('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/'));
 });
 
-app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
-  res.render('admin', {user : req.session.user });
-});
-
-// Define routes
-//start page
+// Home/Base Start page
 app.get('/', (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
@@ -169,7 +166,13 @@ app.get('/', (req, res) => {
   res.render('index', { user: req.session.user });
 });
 
-app.get('/movieList', (req, res) => {
+// Admin Start page
+app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
+  res.render('admin', {user : req.session.user });
+});
+
+// User Start page
+app.get('/movieList', checkAuthenticated, (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
