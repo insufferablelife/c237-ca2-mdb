@@ -226,6 +226,9 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
         }
     });
 });
+//
+
+
 
 // Update -Zhafran
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
@@ -273,6 +276,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
         }
     });
 });
+//
 
 
 
