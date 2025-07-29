@@ -8,10 +8,10 @@ const app = express();
 
 // DB connection
 const db = mysql.createConnection({
-  host: '45-zxi.h.filess.io',
-  user: 'c237ca2mdb_parentfirm',
-  password: '31dd640ff0e2f511ec52c95260c99c4725c046b3',
-  database: 'c237ca2mdb_parentfirm',
+  host: 'c237-all.mysql.database.azure.com',
+  user: 'c237admin',
+  password: 'c2372025!',
+  database: 'c237_e65l_md',
   port: 3307
 });
 
