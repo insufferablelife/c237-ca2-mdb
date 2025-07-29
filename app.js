@@ -3,7 +3,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const mysql = require('mysql2');
 const path = require('path');
-const multer = require('multer');
+const multer = require('multer'); 
 const app = express();
 
 // DB connection
@@ -12,7 +12,7 @@ const db = mysql.createConnection({
   user: 'c237ca2mdb_parentfirm',
   password: '31dd640ff0e2f511ec52c95260c99c4725c046b3',
   database: 'c237ca2mdb_parentfirm',
-  port: '3307'
+  port: 3307
 });
 
 db.connect(err => {
