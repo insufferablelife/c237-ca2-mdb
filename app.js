@@ -77,7 +77,7 @@ const checkAdmin = (req, res, next) => {
 const validateRegistration = (req, res, next) => {
     const { name, username, password, email, birthday, gender} = req.body;
 
-    if (!name || !username || !email || !password || !birthday || !gender) {
+    if (!name || !username || !password || !email || !birthday || !gender) {
         return res.status(400).send('All fields are required.');
     }
     
