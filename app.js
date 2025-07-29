@@ -164,7 +164,7 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
 //start page
 app.get('/', (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/movieList');
+    return res.redirect('/login');
   }
   res.render('index', { user: req.session.user });
 });
