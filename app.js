@@ -88,11 +88,6 @@ const validateRegistration = (req, res, next) => {
     next();
 };
 
-
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
 // Register page
 app.get('/register', (req, res) => {
   res.render('register');
@@ -114,6 +109,9 @@ app.post('/register', validateRegistration, (req, res) => {
 
 // Define routes
 app.get('/', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
   res.render('index', { user: req.session.user });
 });
 
