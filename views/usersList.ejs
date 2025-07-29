@@ -52,7 +52,7 @@
             <td><%= users[i].role %></td>
             <td>$<%= users[i].gender%></td>
             <td>$<%= users[i].isBanned%></td>
-            <!-- Delete Link -->
+            <!-- Terminate user. -->
             <td><a href="/banUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
           </tr>
         <% } %>
