@@ -4,8 +4,6 @@ const flash = require('connect-flash');
 const mysql = require('mysql2');
 const path = require('path');
 const multer = require('multer');
-
-
 const app = express();
 
 // DB connection
@@ -251,7 +249,7 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
-            res.redirect('/movieList');
+            res.redirect('/MovieList');
         }
     });
 });
@@ -265,7 +263,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
         } else {
-            res.redirect('/movieList');
+            res.redirect('/MovieList');
         }
     });
 });
