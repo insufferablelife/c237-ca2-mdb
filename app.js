@@ -97,16 +97,14 @@ app.get('/register', (req, res) => {
 // Handle register
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
-  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, SHA1(?), ?, ?, ?)';
   db.query(query, [name, username, password, email, birthday, gender], (err, result) => {
-     if (err) {
-       console.error('Error inserting into DB:', err);
-       return res.status(500).send('Database error');
+    if (err) {
+        throw err;
     }
-    console.log('User registered:', result);
+    console.log(result); 
     req.flash('success', 'Registration successful! Please log in.');
     res.redirect('/login');
-  });
 });
 
 
@@ -116,6 +114,16 @@ app.get('/login', (req, res) => {
 });
 
 // Handle login
+app.get('/login', (req, res) => {
+  res.render('login', {
+    messages: {
+      error: req.flash('error'),
+      success: req.flash('success')
+    }
+  });
+});
+
+
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const query = 'SELECT * FROM users WHERE username = ? AND password = SHA1(?)';
@@ -137,7 +145,7 @@ app.post('/login', (req, res) => {
     if (user.role === 'admin') {
       res.redirect('/admin');
     } else {
-      res.redirect('/movielist');
+      res.redirect('/movieList');
     }
   });
 });
