@@ -106,7 +106,7 @@ app.post('/register', validateRegistration, (req, res) => {
     req.flash('success', 'Registration successful! Please log in.');
     res.redirect('/login');
 });
-
+});
 
 // Login page
 app.get('/login', (req, res) => {
