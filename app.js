@@ -191,7 +191,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 //
-// Add Movie
+
+// Add Movie ~Raeann
 app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
     res.render('addMovie', {user: req.session.user } ); 
 });
