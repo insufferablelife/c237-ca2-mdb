@@ -97,7 +97,7 @@ app.get('/register', (req, res) => {
 // Handle register
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
-  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, SHA1(?), ?, ?, ?)';
+  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
   db.query(query, [name, username, password, email, birthday, gender], (err, result) => {
     if (err) {
         throw err;
