@@ -41,10 +41,9 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 } 
 }));
 
+// Middleware to make flash msg available
 app.use(flash());
 
-
-// Middleware
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
@@ -52,21 +51,8 @@ app.use((req, res, next) => {
 });
 
 
-// Routes
-app.get('/', (req, res) => {
-  res.render('index', { user: req.session.user });
-});
 
-app.get('/movieList', (req, res) => {
-  db.query('SELECT * FROM movies', (err, results) => {
-    if (err) {
-      return res.status(500).send("Database error");
-    }
-    res.render('movieList', { movies: results });
-  });
-});
-
-//Login and Register-Yizhe
+//Login and Register - Yizhe
 
 const checkAuthenticated = (req, res, next) => {
     if (req.session.user) {
@@ -133,7 +119,20 @@ app.post('/register', validateRegistration, (req, res) => {
     req.flash('success', 'Registration successful! Please log in.');
     res.redirect('/login');
   });
+});
 
+// Define routes
+app.get('/', (req, res) => {
+  res.render('index', { user: req.session.user });
+});
+
+app.get('/movieList', (req, res) => {
+  db.query('SELECT * FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send("Database error");
+    }
+    res.render('movieList', { movies: results });
+  });
 });
 
 // Login page
