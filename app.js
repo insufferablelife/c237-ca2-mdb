@@ -12,7 +12,7 @@ const db = mysql.createConnection({
   user: 'c237admin',
   password: 'c2372025!',
   database: 'c237_e65l_md',
-  port: 3307
+  port: 3306
 });
 
 // Check connection with Database
