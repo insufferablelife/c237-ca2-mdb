@@ -72,9 +72,6 @@ const checkTermed = (req, res, next) => {
     }
 };
 
-
-//
-
 //Check Whether is admin
 const checkAdmin = (req, res, next) => {
     if (req.session.user.role === 'admin') {
