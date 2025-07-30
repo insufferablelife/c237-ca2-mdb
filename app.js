@@ -228,7 +228,7 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
     params.push(ratingFilter);
   }
 
-  db.query('SELECT * FROM movies', (err, results) => {
+  db.query(sql, params, (err, results) => {
     if (err) {
       return res.status(500).send("Database error");
     }
