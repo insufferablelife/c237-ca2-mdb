@@ -194,9 +194,15 @@ app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
-// userList - Yow Sun
+// userList - Yow Sun (AI was used)
 app.get('/userList', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-  res.render('userList', {user : req.session.user });
+  db.query('SELECT * FROM users', (err, results) => {
+    if (err) {
+      req.flash('error', 'Database error');
+      return res.redirect('/');
+    }
+    res.render('userList', { user: req.session.user, users: results });
+  });
 });
 
 // Termed page - Yow Sun
