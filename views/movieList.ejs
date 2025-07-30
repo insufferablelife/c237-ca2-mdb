@@ -49,14 +49,14 @@
       <tbody>
         <% for(let i=0; i < movies.length; i++) { %>
           <tr>
-            <td><a href="/movie/<%= movies[i].movieId %>" ><%= movies[i].name %></a></td>
+            <td><a href="/movie/<%= movies[i].movieID %>" ><%= movies[i].name %></a></td>
             <td><img src = "images/<%= movies[i].image %>" width="20%"></td>
             <td><%= movies[i].rating %></td>
             <td>$<%= movies[i].date%></td>
             <!-- Edit Link -->
-            <td><a href="/updateMovie/<%= movies[i].movieId %>">Edit</a></td>
+            <td><a href="/updateMovie/<%= movies[i].movieID %>">Edit</a></td>
             <!-- Delete Link -->
-            <td><a href="/deleteMovie/<%= movies[i].movieId %>" onclick="return confirm('ARE U SURE YUO WANT TO DELETE THE ACTION PACKED MVOIE???')">Delete</a></td>
+            <td><a href="/deleteMovie/<%= movies[i].movieID %>" onclick="return confirm('ARE U SURE YUO WANT TO DELETE THE ACTION PACKED MVOIE???')">Delete</a></td>
           </tr>
         <% } %>
       </tbody>
