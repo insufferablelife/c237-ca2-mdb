@@ -87,15 +87,6 @@ const checkAuthenticated = (req, res, next) => {
     }
 };
 
-//Check Whether is admin
-const checkAdmin = (req, res, next) => {
-    if (req.session.user.role === 'admin') {
-        return next();
-    } else {
-        req.flash('error', 'Access denied');
-        res.redirect('/movieList');
-    }
-};
 
 // Middleware for form validation
 const validateRegistration = (req, res, next) => {
