@@ -223,7 +223,9 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
     }
     res.render('movieList', { 
       movies: results,
-      user: req.session.user
+      user: req.session.user,
+      search,
+      ratingFilter
     });
   });
 });

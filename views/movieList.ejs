@@ -30,6 +30,21 @@
     </div>
   </nav>
 
+<form method="GET" action="/movieList" class="mb-4">
+  <input type="text" name="search" placeholder="Search movies..." value="<%= search %>">
+  
+  <select name="rating">
+    <option value="">All Ratings</option>
+    <option value="G" <%= ratingFilter === 'G' ? 'selected' : '' %>>G</option>
+    <option value="PG" <%= ratingFilter === 'PG' ? 'selected' : '' %>>PG</option>
+    <option value="PG-13" <%= ratingFilter === 'PG-13' ? 'selected' : '' %>>PG-13</option>
+    <option value="R" <%= ratingFilter === 'R' ? 'selected' : '' %>>R</option>
+  </select>
+
+  <button type="submit">Search</button>
+</form>
+
+
   <div class="container">
     <p>Welcome, <%= user.username %> (<%= user.role %>)</p>
     <br>
