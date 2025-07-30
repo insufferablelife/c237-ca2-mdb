@@ -280,8 +280,8 @@ app.get('/mainPage', (req, res) => {
     res.render('mainPage', { 
       movies: results,
       user: req.session.user,
-      search: search,
-      ratingFilter: ratingFilter
+      search,
+      ratingFilter
     });
   });
 });
