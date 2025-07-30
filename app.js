@@ -351,6 +351,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
+            req.flash('success', 'Movie updated successfully!');
             res.redirect('/movieList');
         }
 
