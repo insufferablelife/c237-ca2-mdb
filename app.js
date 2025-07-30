@@ -334,13 +334,27 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAdmin, checkTermed,  (req, res) => {
+app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed,  (req, res) => {
     const movieID = req.params.id;
+    const userId = req.session.user.id;
+    const isAdmin = req.session.user.role === 'admin';
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
     if (req.file) { 
         image = req.file.filename; 
     };
+
+    db.query('SELECT * FROM movies WHERE movieID = ?', [movieID], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(404).send("Movie not found");
+        }
+
+        const movie = results[0];
+
+        if (movie.userID !== userId && !isAdmin) {
+            req.flash('error', 'You are not allowed to update this movie.');
+            return res.redirect('/movieList');
+        }
 
     const sql = 'UPDATE movies SET name = ? , releaseDate = ?, rating = ?, image =? WHERE movieID = ?';
     db.query(sql, [name, releaseDate, rating, image, movieID], (error, results) => {
@@ -350,6 +364,8 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAd
         } else {
             res.redirect('/movieList');
         }
+
+        });
     });
 });
 //
@@ -357,15 +373,31 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAd
 
 
 //Delete -Zhafran
-app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
     const movieID = req.params.id;
-    db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error, results) => {
-        if (error) {
-            console.error("Error deleting Movie:", error);
-            res.status(500).send('Error deleting Movie');
-        } else {
-            res.redirect('/movieList');
+    const userId = req.session.user.id;
+    const isAdmin = req.session.user.role === 'admin';
+
+    // First fetch movie
+    db.query('SELECT * FROM movies WHERE movieID = ?', [movieID], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(404).send("Movie not found");
         }
+
+        const movie = results[0];
+
+        if (movie.userID !== userId && !isAdmin) {
+            req.flash('error', 'You are not allowed to delete this movie.');
+            return res.redirect('/movieList');
+        }
+
+        db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error) => {
+            if (error) {
+                console.error("Error deleting Movie:", error);
+                return res.status(500).send('Error deleting Movie');
+            }
+            res.redirect('/movieList');
+        });
     });
 });
 //
