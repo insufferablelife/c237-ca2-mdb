@@ -313,7 +313,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 // Update -Zhafran
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res) => {
-    const movieID = req.params.id;
+    const movieID = req.params.movieID;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
         if (error) throw error;
@@ -326,8 +326,8 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
     });
 });
 app.post('/updateMovie/:id', checkAuthenticated, checkTermed, upload.single('image'), (req, res) => {
-    const movieID = req.params.id;
-    const userID = req.session.user.id;
+    const movieID = req.params.movieID;
+    const userID = req.session.user.userID;
     const isAdmin = req.session.user.role === 'admin';
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -366,8 +366,8 @@ app.post('/updateMovie/:id', checkAuthenticated, checkTermed, upload.single('ima
 
 //Delete -Zhafran
 app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
-    const movieID = req.params.id;
-    const userID = req.session.user.id;
+    const movieID = req.params.movieID;
+    const userID = req.session.userID;
     const isAdmin = req.session.user.role === 'admin';
 
     // First fetch movie
@@ -398,7 +398,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
 
 // yow sun - ban user
 app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const userID = req.params.id;
+    const userID = req.params.userID;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userID = ?';
     db.query(sql, [userID], (error, results) => {
@@ -413,7 +413,7 @@ app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) 
 
 // yow sun - unban user
 app.get('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const userID = req.params.id;
+    const userID = req.params.userID;
 
     const sql = 'UPDATE users SET isBanned = 0 WHERE userID = ?';
     db.query(sql, [userID], (error, results) => {
