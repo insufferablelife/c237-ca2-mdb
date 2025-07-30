@@ -325,7 +325,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
 });
 app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed,  (req, res) => {
     const movieID = req.params.id;
-    const movieId = req.params.id;
+    const movieID = req.params.id;
     const userId = req.session.user.id;
     const isAdmin = req.session.user.role === 'admin';
     const { name, releaseDate, rating } = req.body;
@@ -334,7 +334,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
         image = req.file.filename; 
     };
 
-    db.query('SELECT * FROM movies WHERE movieId = ?', [movieId], (err, results) => {
+    db.query('SELECT * FROM movies WHERE movieID = ?', [movieID], (err, results) => {
         if (err || results.length === 0) {
             return res.status(404).send("Movie not found");
         }
@@ -364,12 +364,12 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 
 //Delete -Zhafran
 app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
-    const movieId = req.params.id;
+    const movieID = req.params.id;
     const userId = req.session.user.id;
     const isAdmin = req.session.user.role === 'admin';
 
     // First fetch movie
-    db.query('SELECT * FROM movies WHERE movieId = ?', [movieId], (err, results) => {
+    db.query('SELECT * FROM movies WHERE movieID = ?', [movieID], (err, results) => {
         if (err || results.length === 0) {
             return res.status(404).send("Movie not found");
         }
@@ -381,7 +381,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
             return res.redirect('/movieList');
         }
 
-        db.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error) => {
+        db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error) => {
             if (error) {
                 console.error("Error deleting Movie:", error);
                 return res.status(500).send('Error deleting Movie');
