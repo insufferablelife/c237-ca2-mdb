@@ -160,7 +160,8 @@ app.post('/login', (req, res) => {
     req.session.user = {
       id: user.id,
       username: user.username,
-      role: user.role
+      role: user.role,
+      isBanned: user.isBanned
     };
 
     // Successful login
@@ -171,7 +172,7 @@ app.post('/login', (req, res) => {
       res.redirect('/admin');
       } else {
       res.redirect('/movieList');
-    }
+      }
     }
   });
 });
