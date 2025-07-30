@@ -317,7 +317,7 @@ app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
 });
 
 // yow sun - unban user
-app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
+app.post('/unbanUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
