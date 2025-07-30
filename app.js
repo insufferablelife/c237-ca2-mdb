@@ -84,6 +84,16 @@ const checkAuthenticated = (req, res, next) => {
 };
 
 //Check Whether is admin
+const checkAdmin = (req, res, next) => {
+    if (req.session.user.role === 'admin') {
+        return next();
+    } else {
+        req.flash('error', 'Access denied');
+        res.redirect('/movieList');
+    }
+};
+
+//Check Whether is admin
 const checkMovieOwnerOrAdmin = (req, res, next) => {
     const movieID = req.params.id;
     const userId = req.session.user.id;
