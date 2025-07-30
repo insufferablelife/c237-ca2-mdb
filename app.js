@@ -182,9 +182,14 @@ app.get('/', (req, res) => {
     if (err) {
       return res.status(500).send('Database error');
     }
+
+    res.render('index', {
+      user: req.session.user,
+      movies: results  // this makes 'movies' available in index.ejs
+    });
   });
-  res.render('index', { user: req.session.user });
 });
+
 
 // Admin Start page
 app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
