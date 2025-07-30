@@ -64,7 +64,7 @@ app.use((req, res, next) => {
 
 // yow sun - terminated screen
 const checkTermed = (req, res, next) => {
-    if (req.session.user.isBanned === '0') {
+    if (req.session.user.isBanned == 0) {
         return next();
     } else {
         req.flash('error', 'Your account has been terminated.');
@@ -194,8 +194,13 @@ app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
+// Admin ban page - Yow Sun
+app.get('/banned', (req, res) => {
+  res.render('banned', { message: req.flash('error') });
+});
+
 // Search/Filter Function - Jing Xiang + // User Start page
-app.get('/movieList', checkAuthenticated, (req, res) => {
+app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
   const search = req.query.search || ''; //get search input from query string
   const ratingFilter = req.query.rating || ''; // optional dropdown filter
 
@@ -282,7 +287,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
@@ -299,7 +304,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, 
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
