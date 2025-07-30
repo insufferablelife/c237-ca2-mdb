@@ -194,11 +194,16 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
-// User Start page
+// User Start page + // Search/Filter Function -Jing Xiang
 app.get('/movieList', checkAuthenticated, (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
+
+XX
+
+
+
 
   db.query('SELECT * FROM movies', (err, results) => {
     if (err) {
