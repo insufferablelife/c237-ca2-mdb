@@ -178,9 +178,11 @@ app.get('/logout', (req, res) => {
 
 // Home/Base Start page
 app.get('/', (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
+  db.query('SELECT name, image FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send('Database error');
+    }
+  });
   res.render('index', { user: req.session.user });
 });
 
