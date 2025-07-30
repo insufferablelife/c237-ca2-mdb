@@ -8,30 +8,32 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Funny MDB</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/movieList">List of Movies</a>
-            </li> 
-            <li class="nav-item">
-              <a class="nav-link" href="/addMovie">Add New Movie</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/contact">Contact Us</a> 
-            </li>  
-            <li class="nav-item">
-              <a class="nav-link" href="/logout">Logout</a>
-            </li> 
-          </ul>
-        </div>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/mainPage">Main Page</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/addMovie">Add New Movies</a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact Us</a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="/movieList">Movie List</a>
+          </li> 
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
   <div class="container">
     <p>Welcome, <%= user.username %> (<%= user.role %>)</p>
