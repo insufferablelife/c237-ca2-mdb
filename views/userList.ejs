@@ -57,9 +57,18 @@
             <td><%= users[i].username %></a></td>
             <td><%= users[i].email %></td>
             <td><%= users[i].role %></td>
-            <td><%= users[i].birthday %></td>
-            <td>$<%= users[i].gender%></td>
-            <td>$<%= users[i].isBanned%></td>
+            <td>
+              <% 
+                let date = new Date(users[i].birthday);
+                let day = String(date.getDate()).padStart(2, '0');
+                let month = String(date.getMonth() + 1).padStart(2, '0');
+                let year = date.getFullYear();
+                let formattedDate = `${day}/${month}/${year}`;
+              %>
+              <%= formattedDate %>
+            </td>
+            <td><%= users[i].gender%></td>
+            <td><%= users[i].isBanned%></td>
             <td><a href="/banUser/<%= users[i].userID %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
             <td><a href="/unbanUser/<%= users[i].userID %>" onclick="return confirm('Are you sure you want to unban this user?')">UNBAN</a></td>
           </tr>
