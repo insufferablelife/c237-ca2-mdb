@@ -15,7 +15,6 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-
 const upload = multer({ storage: storage });
 
 // DB connection
@@ -26,7 +25,6 @@ const db = mysql.createConnection({
   database: 'c237_e65l_md',
   port: 3306
 });
-
 db.connect((err) => {
   if (err) {
     console.error('DB connection error:', err);
@@ -62,16 +60,26 @@ app.use((req, res, next) => {
 
 
 
-// yow sun - terminated screen
+// yow sun - user ban screen
 const checkTermed = (req, res, next) => {
     if (req.session.user.isBanned == 0) {
         return next();
     } else {
-        req.flash('error', 'Your account has been terminated.');
+        req.flash('error', 'Your account has been banned.');
         res.redirect('/banned');
     }
 };
-//
+
+//Login and Register - Yizhe
+// See User Logged in ornot
+const checkAuthenticated = (req, res, next) => {
+    if (req.session.user) {
+        return next();
+    } else {
+        req.flash('error', 'Please log in to start using MoviX');
+        res.redirect('/login');
+    }
+};
 
 //Check Whether is admin
 const checkAdmin = (req, res, next) => {
@@ -83,24 +91,11 @@ const checkAdmin = (req, res, next) => {
     }
 };
 
-
-//Login and Register - Yizhe
-// See User Logged in ornot
-const checkAuthenticated = (req, res, next) => {
-    if (req.session.user) {
-        return next();
-    } else {
-        req.flash('error', 'Please log in to view this resource');
-        res.redirect('/login');
-    }
-};
-
-
 // Middleware for form validation
 const validateRegistration = (req, res, next) => {
-    const { name, username, password, email, birthday, gender} = req.body;
+    const { username, password, email, birthday, gender} = req.body;
 
-    if (!name || !username || !password || !email || !birthday || !gender) {
+    if (!username || !password || !email || !birthday || !gender) {
         return res.status(400).send('All fields are required.');
     }
     
@@ -112,7 +107,7 @@ const validateRegistration = (req, res, next) => {
     next();
 };
 
-// Define Routes
+//   Define Routes
 // Register page
 app.get('/register', (req, res) => {
   res.render('register', { messages: req.flash('error'), formData: req.flash('formData')[0] });
@@ -167,7 +162,7 @@ app.post('/login', (req, res) => {
     if (results.length > 0) {
       req.flash('success', 'Login successful!');
     // Redirect based on role
-      if (user.role === 'admin') {
+      if (req.session.user.role === 'admin') {
       res.redirect('/admin');
       } else {
       res.redirect('/movieList');
@@ -183,11 +178,18 @@ app.get('/logout', (req, res) => {
 
 // Home/Base Start page
 app.get('/', (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-  res.render('index', { user: req.session.user });
+  db.query('SELECT name, image FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send('Database error');
+    }
+
+    res.render('index', {
+      user: req.session.user,
+      movies: results  // this makes 'movies' available in index.ejs
+    });
+  });
 });
+
 
 // Admin Start page
 app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
@@ -228,7 +230,7 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
     params.push(ratingFilter);
   }
 
-  db.query('SELECT * FROM movies', (err, results) => {
+  db.query(sql, params, (err, results) => {
     if (err) {
       return res.status(500).send("Database error");
     }
@@ -242,6 +244,37 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
 });
 //
 
+// movieAdmin 
+app.get('/movieAdmin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+  const search = req.query.search || ''; //get search input from query string
+  const ratingFilter = req.query.rating || ''; // optional dropdown filter
+
+  let sql = 'SELECT * FROM movies WHERE 1=1'; // base query (true/false)
+  let params = [];
+
+  if (search) {
+    sql += ' AND name LIKE ?';
+    params.push(`%${search}%`); 
+  }
+
+  if (ratingFilter) {
+    sql += ' AND rating = ?';
+    params.push(ratingFilter);
+  }
+
+  db.query('SELECT * FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send("Database error");
+    }
+    res.render('movieAdmin', { 
+      movies: results,
+      user: req.session.user,
+      search,
+      ratingFilter
+    });
+  });
+});
+//
 
 
 // Add Movie ~Raeann
@@ -264,7 +297,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
         } else {
-            res.redirect('/addMovie');
+            res.redirect('/movieList');
         }
     });
 });
@@ -273,7 +306,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 
 // Update -Zhafran
-app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed, (req,res) => {
+app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res) => {
     const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
@@ -286,7 +319,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed, (req,res
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed, (req, res) => {
+app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAdmin, checkTermed,  (req, res) => {
     const movieID = req.params.id;
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -325,11 +358,11 @@ app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, r
 
 
 // yow sun - ban user
-app.post('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const userId = req.params.id;
+app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+    const userID = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
-    db.query(sql, [userId], (error, results) => {
+    db.query(sql, [userID], (error, results) => {
         if (error) {
             console.error("Error banning user:", error);
             res.status(500).send('Error banning user');
@@ -340,11 +373,11 @@ app.post('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res)
 });
 
 // yow sun - unban user
-app.post('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const userId = req.params.id;
+app.get('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+    const userID = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
-    db.query(sql, [userId], (error, results) => {
+    db.query(sql, [userID], (error, results) => {
         if (error) {
             console.error("Error unbanning user:", error);
             res.status(500).send('Error unbanning user');

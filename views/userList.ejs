@@ -17,8 +17,14 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="/addMovie">ADD DA MOVIES</a>
+              <a class="nav-link" href="/movieList">List of Movies</a>
             </li> 
+            <li class="nav-item">
+              <a class="nav-link" href="/addMovie">Add New Movie</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact Us</a> 
+            </li>  
             <li class="nav-item">
               <a class="nav-link" href="/logout">Logout</a>
             </li> 
@@ -41,20 +47,21 @@
             <th width="50">Date of Birth</th>
             <th width="50">Gender</th>
             <th width="50">Ban Status</th>
-            <th width="50">TERMINATE</th>
-            <th width="50">UNBAN</th>
+            <th width="50">Ban</th>
+            <th width="50">Unban</th>
           </tr>
       </thead>
       <tbody>
         <% for(let i=0; i < users.length; i++) { %>
           <tr>
-            <td><a href="/user/<%= users[i].userId %>" ><%= users[i].username %></a></td>
+            <td><%= users[i].username %></a></td>
             <td><%= users[i].email %></td>
             <td><%= users[i].role %></td>
+            <td><%= users[i].birthday %></td>
             <td>$<%= users[i].gender%></td>
             <td>$<%= users[i].isBanned%></td>
-            <td><a href="/banUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
-            <td><a href="/unbanUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to unban this user?')">UNBAN</a></td>
+            <td><a href="/banUser/<%= users[i].userID %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
+            <td><a href="/unbanUser/<%= users[i].userID %>" onclick="return confirm('Are you sure you want to unban this user?')">UNBAN</a></td>
           </tr>
         <% } %>
       </tbody>
