@@ -42,6 +42,7 @@
             <th width="50">Gender</th>
             <th width="50">Ban Status</th>
             <th width="50">TERMINATE</th>
+            <th width="50">UNBAN</th>
           </tr>
       </thead>
       <tbody>
@@ -52,8 +53,8 @@
             <td><%= users[i].role %></td>
             <td>$<%= users[i].gender%></td>
             <td>$<%= users[i].isBanned%></td>
-            <!-- Terminate user. -->
             <td><a href="/banUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
+            <td><a href="/unbanUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to unban this user?')">UNBAN</a></td>
           </tr>
         <% } %>
       </tbody>
