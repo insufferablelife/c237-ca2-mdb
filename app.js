@@ -121,7 +121,7 @@ app.get('/register', (req, res) => {
 // Handle registration
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
-  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO users (name, username, password, email, birthday, gender) VALUES (?, ?, SHA1(?), ?, ?, ?)';
   db.query(query, [name, username, password, email, birthday, gender], (err, result) => {
     if (err) {
         throw err;
@@ -146,7 +146,7 @@ app.post('/login', (req, res) => {
     return res.redirect('/login'); 
   }
 
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+  const query = 'SELECT * FROM users WHERE username = ? AND password = SHA1(?)';
   db.query(query, [username, password], (err, results) => {
     // Error logging in OR Invalid login credentials
     if (err || results.length === 0) {
