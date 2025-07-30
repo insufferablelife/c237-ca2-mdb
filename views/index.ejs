@@ -8,11 +8,24 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     .hero {
-      background: url('/images/show101.avif') center center/cover no-repeat;
-      color: white;
-      padding: 150px 20px;
-      text-align: center;
-    }
+    position: relative;
+    background: url('/images/show101.avif') center center/cover no-repeat;
+    color: white;
+    padding: 150px 20px;
+    text-align: center;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity here (0 = transparent, 1 = solid) */
+    z-index: -1;
+  }
     .faq-item button {
       width: 100%;
       text-align: left;
