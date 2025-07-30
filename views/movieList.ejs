@@ -68,7 +68,7 @@
             <td><a href="/movie/<%= movies[i].movieID %>" ><%= movies[i].name %></a></td>
             <td><img src = "images/<%= movies[i].image %>" width="20%"></td>
             <td><%= movies[i].rating %></td>
-            <td>$<%= movies[i].date%></td>
+            <td>$<%= movies[i].releaseDate%></td>
             <!-- Edit Link -->
             <td><a href="/updateMovie/<%= movies[i].movieId %>">Edit</a></td>
             <!-- Delete Link -->
@@ -77,6 +77,18 @@
         <% } %>
       </tbody>
     </table>
+  </div>
+
+  <div style="text-align:center; margin-left: 50px;" class="row align-items-center">
+      <span class="border border-grey" style="border: 4px; height:500px; width:400px;">
+          <img src="https://m.media-amazon.com/images/I/81yLt8OG7zL.jpg" style="height:300px; width:200px;" >
+          </br></br>
+          <div style="text-align: left; padding-left: 20px;">
+          <h5><b>The Little Prince</b></h5>
+          <p>$20.00</p>
+          <a class="btn btn-dark" href="TheLittlePrinceDetails.html" role="button">View Details</a>
+          </div>
+      </span>
   </div>
 </body>
 </html>
