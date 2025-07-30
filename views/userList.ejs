@@ -57,8 +57,8 @@
             <td><%= users[i].birthday %></td>
             <td>$<%= users[i].gender%></td>
             <td>$<%= users[i].isBanned%></td>
-            <td><a href="/banUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
-            <td><a href="/unbanUser/<%= users[i].userId %>" onclick="return confirm('Are you sure you want to unban this user?')">UNBAN</a></td>
+            <td><a href="/banUser/<%= users[i].userID %>" onclick="return confirm('Are you sure you want to ban this user?')">BAN</a></td>
+            <td><a href="/unbanUser/<%= users[i].userID %>" onclick="return confirm('Are you sure you want to unban this user?')">UNBAN</a></td>
           </tr>
         <% } %>
       </tbody>
