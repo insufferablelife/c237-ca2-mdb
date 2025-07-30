@@ -21,6 +21,9 @@
           </li> 
           <li class="nav-item">
             <a class="nav-link" href="/addMovie">Add New Movies</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/userList">User Lists</a>
           </li> 
           <li class="nav-item">
             <a class="nav-link" href="/contact">Contact Us</a> 
@@ -54,8 +57,18 @@
           <tr>
             <td><a href="/movie/<%= movies[i].movieID %>" ><%= movies[i].name %></a></td>
             <td><img src = "images/<%= movies[i].image %>" width="50%"></td>
-            <td><%= movies[i].rating %></td>
-            <td>$<%= movies[i].date%></td>
+            <td><%= movies[i].rating %>⭐</td>
+            <td>
+              <% 
+                let rawDate = movies[i].releaseDate;
+                if (typeof rawDate === 'string' && rawDate.startsWith('$')) {
+                  rawDate = rawDate.slice(1); // Remove $ sign
+                }
+                const dateObj = new Date(rawDate);
+                const formattedDate = isNaN(dateObj) ? movies[i].releaseDate : dateObj.toLocaleDateString('en-GB');
+              %>
+              <%= formattedDate %>
+            </td>
             <!-- Edit Link -->
             <td><a href="/updateMovie/<%= movies[i].movieID %>">Edit</a></td>
             <!-- Delete Link -->
