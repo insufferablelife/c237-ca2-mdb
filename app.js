@@ -172,7 +172,7 @@ app.post('/login', (req, res) => {
       } else {
       res.redirect('/movieList');
     }
-  }
+    }
   });
 });
 
@@ -194,13 +194,14 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
-// User Start page + // Search/Filter Function -Jing Xiang
+// User Start page + // Search/Filter Function - Jing Xiang
 app.get('/movieList', checkAuthenticated, (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
 
-XX
+  const search = req.query.search || ''; //get search input from query string
+  const ratingFilter = req.query.rating || ''; // optional dropdown filter
 
 
 
