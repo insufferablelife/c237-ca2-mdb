@@ -172,8 +172,8 @@ app.post('/login', (req, res) => {
       res.redirect('/admin');
       } else {
       res.redirect('/movieList');
+      }
     }
-  }
   });
 });
 
@@ -195,11 +195,17 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
-// User Start page
+// User Start page + // Search/Filter Function - Jing Xiang
 app.get('/movieList', checkAuthenticated, (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
   }
+
+  const search = req.query.search || ''; //get search input from query string
+  const ratingFilter = req.query.rating || ''; // optional dropdown filter
+
+
+
 
   db.query('SELECT * FROM movies', (err, results) => {
     if (err) {
