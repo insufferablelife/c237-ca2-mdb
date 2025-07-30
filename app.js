@@ -360,7 +360,7 @@ app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) 
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
-    db.query(sql, [userId], (error, results) => {
+    db.query(sql, [userID], (error, results) => {
         if (error) {
             console.error("Error banning user:", error);
             res.status(500).send('Error banning user');
@@ -375,7 +375,7 @@ app.get('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
-    db.query(sql, [userId], (error, results) => {
+    db.query(sql, [userID], (error, results) => {
         if (error) {
             console.error("Error unbanning user:", error);
             res.status(500).send('Error unbanning user');
