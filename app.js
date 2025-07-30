@@ -171,7 +171,7 @@ app.post('/login', (req, res) => {
       res.redirect('/admin');
       } else {
       res.redirect('/movieList');
-    }
+      }
     }
   });
 });
