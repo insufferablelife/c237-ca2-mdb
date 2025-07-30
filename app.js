@@ -92,6 +92,26 @@ const checkAdmin = (req, res, next) => {
     }
 };
 
+//Check Whether is admin
+const checkMovieOwnerOrAdmin = (req, res, next) => {
+    const movieID = req.params.id;
+    const userId = req.session.user.id;
+    const isAdmin = req.session.user.role === 'admin';
+
+    db.query('SELECT userId FROM movies WHERE movieID = ?', [movieID], (err, results) => {
+        if (err || results.length === 0) {
+            req.flash('error', 'Movie not found');
+            return res.redirect('/movieList');
+        }
+        if (isAdmin || results[0].userId === userId) {
+            return next();
+        } else {
+            req.flash('error', 'Access denied');
+            return res.redirect('/movieList');
+        }
+    });
+};
+
 // Middleware for form validation
 const validateRegistration = (req, res, next) => {
     const { name, username, password, email, birthday, gender} = req.body;
@@ -276,17 +296,13 @@ app.get('/addMovie', checkAuthenticated, checkTermed, (req, res) => {
     res.render('addMovie', {user: req.session.user } ); 
 });
 
-app.post('/addMovie', upload.single('image'),  (req, res) => {
-    const { name, rating, releaseDate} = req.body;
-    let image;
-    if (req.file) {
-        image = req.file.filename;
-    } else {
-        image = null;
-    }
+app.post('/addMovie', upload.single('image'), checkAuthenticated, checkTermed, (req, res) => {
+    const { name, rating, releaseDate } = req.body;
+    let image = req.file ? req.file.filename : null;
+    const userId = req.session.user.id;
 
-    const sql = 'INSERT INTO movies (name, rating, releaseDate, image) VALUES (?, ?, ?, ?)';
-    db.query(sql , [name, rating, releaseDate, image], (error, results) => {
+    const sql = 'INSERT INTO movies (name, rating, releaseDate, image, userId) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [name, rating, releaseDate, image, userId], (error, results) => {
         if (error) {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
@@ -300,7 +316,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 
 // Update -Zhafran
-app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res) => {
+app.get('/updateMovie/:id', checkAuthenticated, checkMovieOwnerOrAdmin, checkTermed, (req, res) => {
     const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
@@ -313,7 +329,8 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAdmin, checkTermed,  (req, res) => {
+
+app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkMovieOwnerOrAdmin, checkTermed,  (req, res) => {
     const movieID = req.params.id;
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -331,12 +348,9 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAd
         }
     });
 });
-//
-
-
 
 //Delete -Zhafran
-app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+app.get('/deleteMovie/:id', checkAuthenticated, checkMovieOwnerOrAdmin, checkTermed, (req, res) => {
     const movieID = req.params.id;
     db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error, results) => {
         if (error) {
