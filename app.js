@@ -194,17 +194,23 @@ app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
-// User Start page + // Search/Filter Function - Jing Xiang
+// Search/Filter Function - Jing Xiang + // User Start page
 app.get('/movieList', checkAuthenticated, (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-
   const search = req.query.search || ''; //get search input from query string
   const ratingFilter = req.query.rating || ''; // optional dropdown filter
 
+  let sql = 'SELECT * FROM movies WHERE 1=1'; // base query (true/false)
+  let params = [];
 
+  if (search) {
+    sql += ' AND name LIKE ?';
+    params.push(`%${search}%`); 
+  }
 
+  if (ratingFilter) {
+    sql += ' AND rating = ?';
+    params.push(ratingFilter);
+  }
 
   db.query('SELECT * FROM movies', (err, results) => {
     if (err) {
