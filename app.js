@@ -227,7 +227,7 @@ app.get('/addMovie', checkAuthenticated, (req, res) => {
 });
 
 app.post('/addMovie', upload.single('image'),  (req, res) => {
-    const { name, rating, date} = req.body;
+    const { name, rating, releaseDate} = req.body;
     let image;
     if (req.file) {
         image = req.file.filename;
@@ -253,7 +253,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
     const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
-    connection.query(sql , [movieID], (error, results) => {
+    db.query(sql , [movieID], (error, results) => {
         if (error) throw error;
 
         if (results.length > 0) {
@@ -272,7 +272,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, (req, r
     };
 
     const sql = 'UPDATE movies SET name = ? , releaseDate = ?, rating = ?, image =? WHERE movieID = ?';
-    connection.query(sql, [name, releaseDate, rating, image, movieID], (error, results) => {
+    db.query(sql, [name, releaseDate, rating, image, movieID], (error, results) => {
         if (error) {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
@@ -289,7 +289,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, (req, r
 app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const movieId = req.params.id;
 
-    connection.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
+    db.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
         if (error) {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
@@ -307,7 +307,7 @@ app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
-    connection.query(sql, [userId], (error, results) => {
+    db.query(sql, [userId], (error, results) => {
         if (error) {
             console.error("Error banning user:", error);
             res.status(500).send('Error banning user');
