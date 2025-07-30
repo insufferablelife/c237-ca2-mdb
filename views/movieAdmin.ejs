@@ -30,25 +30,10 @@
     </div>
   </nav>
 
-<form method="GET" action="/movieList" class="mb-4">
-  <input type="text" name="search" placeholder="Search movies..." value="<%= search %>">
-  
-  <select name="rating">
-    <option value="">All Ratings</option>
-    <option value="G" <%= ratingFilter === 'G' ? 'selected' : '' %>>G</option>
-    <option value="PG" <%= ratingFilter === 'PG' ? 'selected' : '' %>>PG</option>
-    <option value="PG-13" <%= ratingFilter === 'PG-13' ? 'selected' : '' %>>PG-13</option>
-    <option value="R" <%= ratingFilter === 'R' ? 'selected' : '' %>>R</option>
-  </select>
-
-  <button type="submit">Search</button>
-</form>
-
-
   <div class="container">
     <p>Welcome, <%= user.username %> (<%= user.role %>)</p>
     <br>
-    <div class="text-center"><h2>SUPA ACTION PACKED MOVIES</h2></div>
+    <div class="text-center"><h2>(CONTROL DA) SUPA ACTION PACKED MOVIES</h2></div>
     <br>
     <table class="table table-hover small text-center">
       <thead>
@@ -69,10 +54,11 @@
             <td><%= movies[i].rating %></td>
             <td>$<%= movies[i].date%></td>
             <!-- Edit Link -->
-            <td><a href="/updateMovie/<%= movies[i].movieId %>">Edit</a></td>
+            <td><a href="/updateMovie/<%= movies[i].movieID %>">Edit</a></td>
             <!-- Delete Link -->
-            <td><a href="/deleteMovie/<%= movies[i].movieId %>" onclick="return confirm('ARE U SURE YUO WANT TO DELETE THE ACTION PACKED MVOIE???')">Delete</a></td>
+            <td><a href="/deleteMovie/<%= movies[i].movieID %>" onclick="return confirm('ARE U SURE YUO WANT TO DELETE THE ACTION PACKED MVOIE???')">Delete</a></td>
           </tr>
+        <% } %>
       </tbody>
     </table>
   </div>
