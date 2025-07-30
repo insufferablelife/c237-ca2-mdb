@@ -242,6 +242,37 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
 });
 //
 
+// movieAdmin 
+app.get('/movieAdmin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+  const search = req.query.search || ''; //get search input from query string
+  const ratingFilter = req.query.rating || ''; // optional dropdown filter
+
+  let sql = 'SELECT * FROM movies WHERE 1=1'; // base query (true/false)
+  let params = [];
+
+  if (search) {
+    sql += ' AND name LIKE ?';
+    params.push(`%${search}%`); 
+  }
+
+  if (ratingFilter) {
+    sql += ' AND rating = ?';
+    params.push(ratingFilter);
+  }
+
+  db.query('SELECT * FROM movies', (err, results) => {
+    if (err) {
+      return res.status(500).send("Database error");
+    }
+    res.render('movieAdmin', { 
+      movies: results,
+      user: req.session.user,
+      search,
+      ratingFilter
+    });
+  });
+});
+//
 
 
 // Add Movie ~Raeann
