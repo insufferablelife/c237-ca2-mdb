@@ -298,6 +298,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
     }
 
     const userID = req.session.user.id; 
+    
     const sql = 'INSERT INTO movies (name, rating, releaseDate, image, userID) VALUES (?, ?, ?, ?, ?)';
     db.query(sql , [name, rating, releaseDate, image, userID], (error, results) => {
         if (error) {
