@@ -228,8 +228,8 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
         image = null;
     }
 
-    const sql = 'INSERT INTO movies (name, rating, date, image) VALUES (?, ?, ?, ?)';
-    connection.query(sql , [name, rating, date, image], (error, results) => {
+    const sql = 'INSERT INTO movies (name, rating, releaseDate, image) VALUES (?, ?, ?, ?)';
+    connection.query(sql , [name, rating, releaseDate, image], (error, results) => {
         if (error) {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
@@ -244,28 +244,28 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 // Update -Zhafran
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
-    const movieId = req.params.id;
-    const sql = 'SELECT * FROM movies WHERE movieId = ?';
-    connection.query(sql , [movieId], (error, results) => {
+    const movieID = req.params.id;
+    const sql = 'SELECT * FROM movies WHERE movieID = ?';
+    connection.query(sql , [movieID], (error, results) => {
         if (error) throw error;
 
         if (results.length > 0) {
-            res.render('updateMovie', { movie: results[0] });
+            res.render('updateMovie', { movies: results[0] });
         } else {
             res.status(404).send('Movie not found');
         }
     });
 });
 app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, (req, res) => {
-    const movieId = req.params.id;
-    const { name, year, rating } = req.body;
+    const movieID = req.params.id;
+    const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
     if (req.file) { 
         image = req.file.filename; 
     };
 
-    const sql = 'UPDATE movies SET name = ? , year = ?, rating = ?, image =? WHERE movieId = ?';
-    connection.query(sql, [name, year, rating, image, movieId], (error, results) => {
+    const sql = 'UPDATE movies SET name = ? , releaseDate = ?, rating = ?, image =? WHERE movieID = ?';
+    connection.query(sql, [name, releaseDate, rating, image, movieID], (error, results) => {
         if (error) {
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
