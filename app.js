@@ -227,7 +227,7 @@ app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
 });
 
 app.post('/addMovie', upload.single('image'),  (req, res) => {
-    const { name, rating, date} = req.body;
+    const { name, rating, releaseDate} = req.body;
     let image;
     if (req.file) {
         image = req.file.filename;
