@@ -326,7 +326,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
 });
 app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed,  (req, res) => {
     const movieID = req.params.id;
-    const userId = req.session.user.id;
+    const userID = req.session.user.id;
     const isAdmin = req.session.user.role === 'admin';
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -341,7 +341,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 
         const movie = results[0];
 
-        if (movie.userID !== userId && !isAdmin) {
+        if (movie.userID !== userID && !isAdmin) {
             req.flash('error', 'You are not allowed to update this movie.');
             return res.redirect('/mainPage');
         }
@@ -366,7 +366,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 //Delete -Zhafran
 app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
     const movieID = req.params.id;
-    const userId = req.session.user.id;
+    const userID = req.session.user.id;
     const isAdmin = req.session.user.role === 'admin';
 
     // First fetch movie
@@ -377,7 +377,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
 
         const movie = results[0];
 
-        if (movie.userID !== userId && !isAdmin) {
+        if (movie.userID !== userID && !isAdmin) {
             req.flash('error', 'You are not allowed to delete this movie.');
             return res.redirect('/mainPage');
         }
@@ -399,7 +399,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
 app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const userID = req.params.id;
 
-    const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
+    const sql = 'UPDATE users SET isBanned = 1 WHERE userID = ?';
     db.query(sql, [userID], (error, results) => {
         if (error) {
             console.error("Error banning user:", error);
@@ -414,7 +414,7 @@ app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) 
 app.get('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const userID = req.params.id;
 
-    const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
+    const sql = 'UPDATE users SET isBanned = 0 WHERE userID = ?';
     db.query(sql, [userID], (error, results) => {
         if (error) {
             console.error("Error unbanning user:", error);
