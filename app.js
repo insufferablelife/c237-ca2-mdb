@@ -107,7 +107,7 @@ const validateRegistration = (req, res, next) => {
     next();
 };
 
-// Define Routes
+//   Define Routes
 // Register page
 app.get('/register', (req, res) => {
   res.render('register', { messages: req.flash('error'), formData: req.flash('formData')[0] });
