@@ -11,12 +11,19 @@
 
     <h2>Register</h2>
 
-  <% if (messages && messages.error.length > 0) { %>
-  <script>alert("<%= messages.error[0] %>");</script>
-  <% } %>
-  <% if (messages && messages.success.length > 0) { %>
-  <script>alert("<%= messages.success[0] %>");</script>
-  <% } %>
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error[0] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= success[0] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
 
     <form action="/register" method="POST">
       <div class="mb-3">
