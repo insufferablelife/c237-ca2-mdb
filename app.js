@@ -303,7 +303,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 
 
 //Delete -Zhafran
-app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const movieID = req.params.id;
     db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error, results) => {
         if (error) {
