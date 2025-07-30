@@ -295,7 +295,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
         } else {
-            res.redirect('/addMovie');
+            res.redirect('/movieList');
         }
     });
 });
