@@ -260,7 +260,7 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
 });
 
 //Main Page Search/Filter Function 
-app.get('/mainPage', (req, res) => {
+app.get('/mainPage', checkAuthenticated, checkTermed,(req, res) => {
   const search = req.query.search || '';
   const ratingFilter = req.query.rating || '';
   let sql = 'SELECT * FROM movies WHERE 1=1';
@@ -276,7 +276,9 @@ app.get('/mainPage', (req, res) => {
   }
 
   db.query(sql, params, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      return res.status(500).send("Database error");
+    }
     res.render('mainPage', { 
       movies: results,
       user: req.session.user,
