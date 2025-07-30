@@ -63,6 +63,19 @@ app.use((req, res, next) => {
 
 
 
+// yow sun - terminated screen
+const checkTermed = (req, res, next) => {
+    if (req.session.user.isBanned === '0') {
+        return next();
+    } else {
+        req.flash('error', 'Your account has been terminated.');
+        res.redirect('/banned');
+    }
+};
+//
+
+
+
 //Login and Register - Yizhe
 // See User Logged in ornot
 const checkAuthenticated = (req, res, next) => {
@@ -128,7 +141,6 @@ app.get('/login', (req, res) => {
 // Handle login
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
-
   // Validate username and password
   if (!username || !password) {
     req.flash('error', 'All fields are required.');
@@ -262,6 +274,9 @@ app.post('/updateMovie/:id', upload.single('image'), (req, res) => {
         }
     });
 });
+//
+
+
 
 //Delete -Zhafran
 app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
@@ -280,18 +295,8 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
 
 
 
-// yow sun - terminated screen
-const checkTermed = (req, res, next) => {
-    if (req.session.user.isBanned === '0') {
-        return next();
-    } else {
-        req.flash('error', 'Your account has been terminated.');
-        res.redirect('/banned');
-    }
-};
-
 // yow sun - ban user
-app.post('/banUser/:id', (req, res) => {
+app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
