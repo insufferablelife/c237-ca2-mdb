@@ -113,6 +113,11 @@ app.get('/register', (req, res) => {
   res.render('register', { messages: req.flash('error'), formData: req.flash('formData')[0] });
 });
 
+// contact page
+app.get('/contact', (req, res) => {
+  res.render('contact');
+});
+
 // Handle registration
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
@@ -302,8 +307,6 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
     });
 });
 //
-
-
 
 // Update -Zhafran
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res) => {
