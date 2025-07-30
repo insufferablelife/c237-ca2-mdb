@@ -93,7 +93,7 @@ const checkAdmin = (req, res, next) => {
         return next();
     } else {
         req.flash('error', 'Access denied');
-        res.redirect('/dashboard');
+        res.redirect('/movieList');
     }
 };
 
@@ -113,7 +113,7 @@ const validateRegistration = (req, res, next) => {
     next();
 };
 
-//   Define Routes
+// Define Routes
 // Register page
 app.get('/register', (req, res) => {
   res.render('register', { messages: req.flash('error'), formData: req.flash('formData')[0] });
