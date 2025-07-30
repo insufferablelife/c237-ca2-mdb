@@ -71,6 +71,8 @@ const checkTermed = (req, res, next) => {
         res.redirect('/banned');
     }
 };
+
+
 //
 
 //Check Whether is admin
