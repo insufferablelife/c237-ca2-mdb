@@ -342,6 +342,26 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
         } else {
             res.redirect('/movieList');
         }
+
+    db.query('SELECT * FROM movies WHERE movieId = ?', [movieId], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(404).send("Movie not found");
+        }
+
+        const movie = results[0];
+
+        if (movie.userID !== userId && !isAdmin) {
+            req.flash('error', 'You are not allowed to delete this movie.');
+            return res.redirect('/movieList');
+        }
+
+        db.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error) => {
+            if (error) {
+                console.error("Error deleting Movie:", error);
+                return res.status(500).send('Error deleting Movie');
+            }
+            res.redirect('/movieList');
+        });});
     });
 });
 //
