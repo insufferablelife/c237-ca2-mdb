@@ -87,7 +87,7 @@ const checkAdmin = (req, res, next) => {
         return next();
     } else {
         req.flash('error', 'Access denied');
-        res.redirect('/movieList');
+        res.redirect('/mainPage');
     }
 };
 
@@ -181,7 +181,7 @@ app.post('/login', (req, res) => {
       if (req.session.user.role === 'admin') {
       res.redirect('/admin');
       } else {
-      res.redirect('/movieList');
+      res.redirect('/mainPage');
       }
     }
   });
@@ -315,7 +315,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
         } else {
-            res.redirect('/movieList');
+            res.redirect('/mainPage');
         }
     });
 });
@@ -354,7 +354,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 
         if (movie.userID !== userId && !isAdmin) {
             req.flash('error', 'You are not allowed to update this movie.');
-            return res.redirect('/movieList');
+            return res.redirect('/mainPage');
         }
 
     const sql = 'UPDATE movies SET name = ? , releaseDate = ?, rating = ?, image =? WHERE movieID = ?';
@@ -364,7 +364,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
             res.status(500).send('Error updating Movie');
         } else {
             req.flash('success', 'Movie updated successfully!');
-            res.redirect('/movieList');
+            res.redirect('/mainPage');
         }
 
         });
@@ -390,7 +390,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
 
         if (movie.userID !== userId && !isAdmin) {
             req.flash('error', 'You are not allowed to delete this movie.');
-            return res.redirect('/movieList');
+            return res.redirect('/mainPage');
         }
 
         db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error) => {
@@ -398,7 +398,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
                 console.error("Error deleting Movie:", error);
                 return res.status(500).send('Error deleting Movie');
             }
-            res.redirect('/movieList');
+            res.redirect('/mainPage');
         });
     });
 });
