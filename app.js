@@ -334,6 +334,18 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
         image = req.file.filename; 
     };
 
+    db.query('SELECT * FROM movies WHERE movieId = ?', [movieId], (err, results) => {
+        if (err || results.length === 0) {
+            return res.status(404).send("Movie not found");
+        }
+
+        const movie = results[0];
+
+        if (movie.userID !== userId && !isAdmin) {
+            req.flash('error', 'You are not allowed to update this movie.');
+            return res.redirect('/movieList');
+        }
+
     const sql = 'UPDATE movies SET name = ? , releaseDate = ?, rating = ?, image =? WHERE movieID = ?';
     db.query(sql, [name, releaseDate, rating, image, movieID], (error, results) => {
         if (error) {
@@ -343,25 +355,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
             res.redirect('/movieList');
         }
 
-    db.query('SELECT * FROM movies WHERE movieId = ?', [movieId], (err, results) => {
-        if (err || results.length === 0) {
-            return res.status(404).send("Movie not found");
-        }
-
-        const movie = results[0];
-
-        if (movie.userID !== userId && !isAdmin) {
-            req.flash('error', 'You are not allowed to delete this movie.');
-            return res.redirect('/movieList');
-        }
-
-        db.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error) => {
-            if (error) {
-                console.error("Error deleting Movie:", error);
-                return res.status(500).send('Error deleting Movie');
-            }
-            res.redirect('/movieList');
-        });});
+        });
     });
 });
 //
