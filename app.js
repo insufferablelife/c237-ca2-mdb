@@ -9,7 +9,7 @@ const app = express();
 // Set up multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'public', 'uploads')); // Directory to save uploaded files
+    cb(null, path.join(__dirname, 'public', 'images')); // Directory to save uploaded files
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
@@ -37,7 +37,6 @@ db.connect((err) => {
 
 //  Set up view engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
 //  enable static files
 app.use(express.static(path.join(__dirname, 'public')));
 // enable form processing
@@ -65,7 +64,7 @@ app.use((req, res, next) => {
 
 // yow sun - terminated screen
 const checkTermed = (req, res, next) => {
-    if (req.session.user.isBanned === '0') {
+    if (req.session.user.isBanned == 0) {
         return next();
     } else {
         req.flash('error', 'Your account has been terminated.');
@@ -191,21 +190,32 @@ app.get('/', (req, res) => {
 });
 
 // Admin Start page
-app.get('/admin', checkAuthenticated, checkAdmin, (req, res) => {
+app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
-// User Start page + // Search/Filter Function - Jing Xiang
-app.get('/movieList', checkAuthenticated, (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
+// Termed page - Yow Sun
+app.get('/banned', (req, res) => {
+  res.render('banned', { message: req.flash('error') });
+});
 
+// Search/Filter Function - Jing Xiang + // User Start page
+app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
   const search = req.query.search || ''; //get search input from query string
   const ratingFilter = req.query.rating || ''; // optional dropdown filter
 
+  let sql = 'SELECT * FROM movies WHERE 1=1'; // base query (true/false)
+  let params = [];
 
+  if (search) {
+    sql += ' AND name LIKE ?';
+    params.push(`%${search}%`); 
+  }
 
+  if (ratingFilter) {
+    sql += ' AND rating = ?';
+    params.push(ratingFilter);
+  }
 
   db.query('SELECT * FROM movies', (err, results) => {
     if (err) {
@@ -213,7 +223,9 @@ app.get('/movieList', checkAuthenticated, (req, res) => {
     }
     res.render('movieList', { 
       movies: results,
-      user: req.session.user
+      user: req.session.user,
+      search,
+      ratingFilter
     });
   });
 });
@@ -222,7 +234,7 @@ app.get('/movieList', checkAuthenticated, (req, res) => {
 
 
 // Add Movie ~Raeann
-app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
+app.get('/addMovie', checkAuthenticated, checkTermed, (req, res) => {
     res.render('addMovie', {user: req.session.user } ); 
 });
 
@@ -241,7 +253,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
         } else {
-            res.redirect('/movieList');
+            res.redirect('/addMovie');
         }
     });
 });
@@ -250,7 +262,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 
 // Update -Zhafran
-app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
+app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed, (req,res) => {
     const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
@@ -263,7 +275,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, (req, res) => {
+app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed, (req, res) => {
     const movieID = req.params.id;
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -277,7 +289,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, (req, r
             console.error("Error updating Movie:", error);
             res.status(500).send('Error updating Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
@@ -286,7 +298,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, (req, r
 
 
 //Delete -Zhafran
-app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
+app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const movieId = req.params.id;
 
     db.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
@@ -294,7 +306,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
         } else {
-            res.redirect('/MovieList');
+            res.redirect('/movieList');
         }
     });
 });
@@ -303,7 +315,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
 
 
 // yow sun - ban user
-app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
+app.post('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
@@ -311,6 +323,21 @@ app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
         if (error) {
             console.error("Error banning user:", error);
             res.status(500).send('Error banning user');
+        } else {
+            res.redirect('/userList');
+        }
+    });
+});
+
+// yow sun - unban user
+app.post('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+    const userId = req.params.id;
+
+    const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
+    db.query(sql, [userId], (error, results) => {
+        if (error) {
+            console.error("Error unbanning user:", error);
+            res.status(500).send('Error unbanning user');
         } else {
             res.redirect('/userList');
         }
