@@ -82,26 +82,6 @@ const checkAdmin = (req, res, next) => {
         res.redirect('/movieList');
     }
 };
-//Check User or Admin
-const checkMovieOwnerOrAdmin = (req, res, next) => {
-    const movieID = req.params.id;
-    const userId = req.session.user.id;
-    const isAdmin = req.session.user.role === 'admin';
-
-    db.query('SELECT userId FROM movies WHERE movieID = ?', [movieID], (err, results) => {
-        if (err || results.length === 0) {
-            req.flash('error', 'Movie not found');
-            return res.redirect('/movieList');
-        }
-        if (isAdmin || results[0].userId === userId) {
-            return next();
-        } else {
-            req.flash('error', 'Access denied');
-            return res.redirect('/movieList');
-        }
-    });
-};
-
 
 //Login and Register - Yizhe
 // See User Logged in ornot
@@ -323,7 +303,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 
 // Update -Zhafran
-app.get('/updateMovie/:id',checkAuthenticated, checkMovieOwnerOrAdmin,(req,res) => {
+app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res) => {
     const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
@@ -336,7 +316,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkMovieOwnerOrAdmin,(req,res) 
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkMovieOwnerOrAdmin,  (req, res) => {
+app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAdmin, checkTermed,  (req, res) => {
     const movieID = req.params.id;
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -359,7 +339,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkMo
 
 
 //Delete -Zhafran
-app.get('/deleteMovie/:id', checkAuthenticated, checkMovieOwnerOrAdmin, (req, res) => {
+app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const movieID = req.params.id;
     db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error, results) => {
         if (error) {
