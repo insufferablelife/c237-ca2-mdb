@@ -229,7 +229,7 @@ app.get('/banned', (req, res) => {
 });
 
 // Search/Filter Function - Jing Xiang + // User Start page
-app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
+app.get('/mainPage', checkAuthenticated, checkTermed, (req, res) => {
   const search = req.query.search || ''; //get search input from query string
   const ratingFilter = req.query.rating || ''; // optional dropdown filter
 
@@ -250,7 +250,7 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
     if (err) {
       return res.status(500).send("Database error");
     }
-    res.render('movieList', { 
+    res.render('mainPage', { 
       movies: results,
       user: req.session.user,
       search,
@@ -259,32 +259,8 @@ app.get('/movieList', checkAuthenticated, checkTermed, (req, res) => {
   });
 });
 
-//Main Page Search/Filter Function 
-app.get('/mainPage', (req, res) => {
-  const search = req.query.search || '';
-  const ratingFilter = req.query.rating || '';
-  let sql = 'SELECT * FROM movies WHERE 1=1';
-  let params = [];
 
-  if (search) {
-    sql += ' AND name LIKE ?';
-    params.push('%' + search + '%');
-  }
-  if (ratingFilter) {
-    sql += ' AND rating = ?';
-    params.push(ratingFilter);
-  }
 
-  db.query(sql, params, (err, results) => {
-    if (err) throw err;
-    res.render('mainPage', { 
-      movies: results,
-      user: req.session.user,
-      search: search,
-      ratingFilter: ratingFilter
-    });
-  });
-});
 // movieAdmin 
 app.get('/movieAdmin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
   const search = req.query.search || ''; //get search input from query string
