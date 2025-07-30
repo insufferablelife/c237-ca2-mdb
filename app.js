@@ -298,7 +298,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
     }
 
     const userID = req.session.user.id; 
-    
+
     const sql = 'INSERT INTO movies (name, rating, releaseDate, image, userID) VALUES (?, ?, ?, ?, ?)';
     db.query(sql , [name, rating, releaseDate, image, userID], (error, results) => {
         if (error) {
@@ -325,7 +325,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed,  (req, res) => {
+app.post('/updateMovie/:id', checkAuthenticated, checkTermed, upload.single('image'), (req, res) => {
     const movieID = req.params.id;
     const userID = req.session.user.id;
     const isAdmin = req.session.user.role === 'admin';
