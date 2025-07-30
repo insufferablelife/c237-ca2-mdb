@@ -356,7 +356,7 @@ app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, r
 
 
 // yow sun - ban user
-app.post('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userId = ?';
@@ -371,7 +371,7 @@ app.post('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res)
 });
 
 // yow sun - unban user
-app.post('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+app.get('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
     const userId = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
