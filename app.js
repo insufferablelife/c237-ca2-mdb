@@ -218,7 +218,9 @@ app.get('/movieList', checkAuthenticated, (req, res) => {
     }
     res.render('movieList', { 
       movies: results,
-      user: req.session.user
+      user: req.session.user,
+      search,
+      ratingFilter
     });
   });
 });
