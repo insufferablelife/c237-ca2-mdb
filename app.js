@@ -118,17 +118,6 @@ app.get('/contact', checkAuthenticated, checkTermed, (req, res) => {
   res.render('contact', { user: req.session.user });
 });
 
-// main page
-app.get('/mainPage', (req, res) => {
-  db.query('SELECT * FROM movies', (err, results) => {
-    if (err) throw err;
-    res.render('mainPage', { 
-      movies: results,
-      user: req.session.user // <-- add this line
-    });
-  });
-});
-
 // Handle registration
 app.post('/register', validateRegistration, (req, res) => {
   const { name, username, password, email, birthday, gender } = req.body;
