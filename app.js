@@ -304,7 +304,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 
 // Update -Zhafran
-app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed, (req,res) => {
+app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, (req,res) => {
     const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
@@ -317,7 +317,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed, (req,res
         }
     });
 });
-app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed, (req, res) => {
+app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkAdmin, (req, res) => {
     const movieID = req.params.id;
     const { name, releaseDate, rating } = req.body;
     let image  = req.body.currentImage; 
@@ -340,7 +340,7 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 
 
 //Delete -Zhafran
-app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, (req, res) => {
     const movieID = req.params.id;
     db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error, results) => {
         if (error) {
