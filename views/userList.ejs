@@ -42,13 +42,13 @@
             <th width="50">Gender</th>
             <th width="50">Ban Status</th>
             <th width="50">Ban</th>
-            <th width="50">UNBAN</th>
+            <th width="50">Unban</th>
           </tr>
       </thead>
       <tbody>
         <% for(let i=0; i < users.length; i++) { %>
           <tr>
-            <td><a href="/user/<%= users[i].userId %>" ><%= users[i].username %></a></td>
+            <td><%= users[i].username %></a></td>
             <td><%= users[i].email %></td>
             <td><%= users[i].role %></td>
             <td><%= users[i].birthday %></td>
