@@ -88,46 +88,14 @@
   </div>
 </div>
 
-
-
-
-<!-- FAQ Section -->
-<div class="container pb-5">
-  <h2 class="mb-4">Frequently Asked Questions</h2>
-  <div class="accordion" id="faqAccordion">
-    <% const faqs = [
-      "What is Funny MDB?",
-      "How much does it cost?",
-      "Where can I watch?",
-      "How do I cancel?",
-      "What can I watch on Funny MDB?",
-      "Is it good for children?"
-    ]; %>
-    <% for (let i = 0; i < faqs.length; i++) { %>
-      <div class="accordion-item bg-dark text-white border-secondary">
-        <h2 class="accordion-header">
-          <button class="accordion-button bg-dark text-white collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq<%= i %>">
-            <%= faqs[i] %>
-          </button>
-        </h2>
-        <div id="faq<%= i %>" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-          <div class="accordion-body">Answer for <%= faqs[i] %> goes here.</div>
-        </div>
-      </div>
-    <% } %>
-  </div>
-</div>
-
 <!-- Footer Subscription Bar -->
-<div class="container pb-5 text-center">
-  <form class="d-flex justify-content-center mt-3" method="POST" action="/subscribe">
-    <input type="email" name="email" placeholder="Email address" class="form-control w-25">
-    <button type="submit" class="btn btn-danger ms-2">Get Started</button>
-  </form>
+<div class="hero">
+  <p class="lead">Start by registering your account:</p>
+  <a href="/register" class="btn btn-danger mt-3">Join Now!</a>
 </div>
 
 <footer class="text-center">
-  <p>Funny MDB &copy; <%= new Date().getFullYear() %>. All rights reserved.</p>
+  <p>Movix &copy; <%= new Date().getFullYear() %>. All rights reserved.</p>
 </footer>
 
 </body>
