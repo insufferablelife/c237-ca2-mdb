@@ -72,11 +72,15 @@
             <td><img src = "images/<%= movies[i].image %>" width="20%"></td>
             <td><%= movies[i].rating %>⭐</td>
             <td>
-                <% 
-                  const dateObj = new Date(movies[i].releaseDate);
-                  const formattedDate = isNaN(dateObj) ? movies[i].releaseDate : dateObj.toLocaleDateString('en-GB');
-                %>
-                <%= formattedDate %>
+              <% 
+                let rawDate = movies[i].releaseDate;
+                if (typeof rawDate === 'string' && rawDate.startsWith('$')) {
+                  rawDate = rawDate.slice(1); // Remove $ sign
+                }
+                const dateObj = new Date(rawDate);
+                const formattedDate = isNaN(dateObj) ? movies[i].releaseDate : dateObj.toLocaleDateString('en-GB');
+              %>
+              <%= formattedDate %>
             </td>
             <!-- Edit Link -->
             <td><a href="/updateMovie/<%= movies[i].movieID %>">Edit</a></td>
