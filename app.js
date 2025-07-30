@@ -150,7 +150,7 @@ app.post('/login', (req, res) => {
   db.query(query, [username, password], (err, results) => {
     // Error logging in OR Invalid login credentials
     if (err || results.length === 0) {
-      req.flash('error', 'Failed login, invalid username or password.', err);
+      req.flash('error', 'Failed login, invalid username or password.');
       return res.redirect('/login');
     }
 
@@ -192,6 +192,17 @@ app.get('/', (req, res) => {
 // Admin Start page
 app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
   res.render('admin', {user : req.session.user });
+});
+
+// userList - Yow Sun (AI was used)
+app.get('/userList', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+  db.query('SELECT * FROM users', (err, results) => {
+    if (err) {
+      req.flash('error', 'Database error');
+      return res.redirect('/');
+    }
+    res.render('userList', { user: req.session.user, users: results });
+  });
 });
 
 // Termed page - Yow Sun
@@ -298,10 +309,9 @@ app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTe
 
 
 //Delete -Zhafran
-app.post('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const movieId = req.params.id;
-
-    db.query('DELETE FROM movies WHERE movieId = ?', [movieId], (error, results) => {
+app.get('/deleteMovie/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+    const movieID = req.params.id;
+    db.query('DELETE FROM movies WHERE movieID = ?', [movieID], (error, results) => {
         if (error) {
             console.error("Error deleting Movie:", error);
             res.status(500).send('Error deleting Movie');
