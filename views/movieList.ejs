@@ -79,10 +79,17 @@
               %>
               <%= formattedDate %>
             </td>
-            <!-- Edit Link -->
-            <td><a href="/updateMovie/<%= movies[i].movieID %>">Edit</a></td>
-            <!-- Delete Link -->
-            <td><a href="/deleteMovie/<%= movies[i].movieID %>" onclick="return confirm('ARE U SURE YUO WANT TO DELETE THE ACTION PACKED MVOIE???')">Delete</a></td>
+            <% if (user.id === movies[i].userID || user.role === 'admin') { %>
+              <td><a href="/updateMovie/<%= movies[i].movieID %>">Edit</a></td>
+              <td>
+                <form method="POST" action="/deleteMovie/<%= movies[i].movieID %>" onsubmit="return confirm('ARE U SURE YUO WANT TO DELETE THE ACTION PACKED MVOIE???')">
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+              </td>
+            <% } else { %>
+              <td>-</td>
+              <td>-</td>
+            <% } %>
           </tr>
         <% } %>
       </tbody>
