@@ -114,8 +114,8 @@ app.get('/register', (req, res) => {
 });
 
 // contact page
-app.get('/contact', (req, res) => {
-  res.render('contact');
+app.get('/contact', checkAuthenticated, checkTermed, (req, res) => {
+  res.render('contact', { user: req.session.user });
 });
 
 // Handle registration
