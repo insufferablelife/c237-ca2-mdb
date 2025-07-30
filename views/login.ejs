@@ -9,19 +9,12 @@
   <div class="container mt-5" style="max-width: 400px;">
     <h2 class="text-center mb-4">Login</h2>
 
-    <% if (errors && errors.length > 0) { %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <%= errors[0] %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    <% } %>
-
-    <% if (messages && messages.length > 0) { %>
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <%= messages[0] %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    <% } %>
+  <% if (messages && messages.error.length > 0) { %>
+  <script>alert("<%= messages.error[0] %>");</script>
+  <% } %>
+  <% if (messages && messages.success.length > 0) { %>
+  <script>alert("<%= messages.success[0] %>");</script>
+  <% } %>
 
     <form method="POST" action="/login">
       <div class="mb-3">
