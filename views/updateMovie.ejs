@@ -32,7 +32,7 @@
     <h2 class="text-center mb-4">Update Movie Info</h2>
     
     <% if (movies) { %>
-      <form action="/updateMovie/<%= movies.movieId %>" method="POST" enctype="multipart/form-data" class="mx-auto" style="max-width: 500px;">
+      <form action="/updateMovie/<%= movies.movieID %>" method="POST" enctype="multipart/form-data" class="mx-auto" style="max-width: 500px;">
         
         <div class="mb-3">
           <label for="name" class="form-label">Movie Name</label>
@@ -40,13 +40,19 @@
         </div>
 
         <div class="mb-3">
-          <label for="rating" class="form-label">Rating</label>
-          <input type="number" class="form-control" id="rating" name="rating" min="0" max="10" value="<%= movies.rating %>" required>
-        </div>
+          <label for="rating">Rating:</label>
+          <select id="rating" name="rating" value="<%= movies.rating %>" class="form-control" required>
+              <option value="1">1.0 ⭐</option>
+              <option value="2">2.0 ⭐</option>
+              <option value="3">3.0 ⭐</option>
+              <option value="4">4.0 ⭐</option>
+              <option value="5">5.0 ⭐</option>
+          </select>
+      </div>
 
         <div class="mb-3">
           <label for="date" class="form-label">Release Date</label>
-          <input type="date" class="form-control" id="date" name="date" value="<%= movies.date ? new Date(movies.date).toISOString().slice(0,10) : '' %>" required>
+          <input type="date" class="form-control" id="date" name="date" value="<%= movies.releaseDate ? new Date(movies.releaseDate).toISOString().slice(0,10) : '' %>" required>
         </div>
 
         <div class="mb-3">
