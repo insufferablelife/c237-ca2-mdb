@@ -222,7 +222,7 @@ app.get('/movieList', checkAuthenticated, (req, res) => {
 
 
 // Add Movie ~Raeann
-app.get('/addMovie', checkAuthenticated, checkAdmin, (req, res) => {
+app.get('/addMovie', checkAuthenticated, (req, res) => {
     res.render('addMovie', {user: req.session.user } ); 
 });
 
