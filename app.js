@@ -316,6 +316,21 @@ app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
     });
 });
 
+// yow sun - unban user
+app.post('/banUser/:id', checkAuthenticated, checkAdmin, (req, res) => {
+    const userId = req.params.id;
+
+    const sql = 'UPDATE users SET isBanned = 0 WHERE userId = ?';
+    db.query(sql, [userId], (error, results) => {
+        if (error) {
+            console.error("Error unbanning user:", error);
+            res.status(500).send('Error unbanning user');
+        } else {
+            res.redirect('/userList');
+        }
+    });
+});
+
 // Start server
 const PORT = 3000;
 app.listen(PORT, () => {
