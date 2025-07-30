@@ -194,6 +194,11 @@ app.get('/admin', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
   res.render('admin', {user : req.session.user });
 });
 
+// userList - Yow Sun
+app.get('/userList', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
+  res.render('userList', {user : req.session.user });
+});
+
 // Termed page - Yow Sun
 app.get('/banned', (req, res) => {
   res.render('banned', { message: req.flash('error') });
