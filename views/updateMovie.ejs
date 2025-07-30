@@ -32,7 +32,7 @@
     <h2 class="text-center mb-4">Update Movie Info</h2>
     
     <% if (movies) { %>
-      <form action="/updateMovie/<%= movies.movieId %>" method="POST" enctype="multipart/form-data" class="mx-auto" style="max-width: 500px;">
+      <form action="/updateMovie/<%= movies.movieID %>" method="POST" enctype="multipart/form-data" class="mx-auto" style="max-width: 500px;">
         
         <div class="mb-3">
           <label for="name" class="form-label">Movie Name</label>
@@ -46,7 +46,7 @@
 
         <div class="mb-3">
           <label for="date" class="form-label">Release Date</label>
-          <input type="date" class="form-control" id="date" name="date" value="<%= movies.date ? new Date(movies.date).toISOString().slice(0,10) : '' %>" required>
+          <input type="date" class="form-control" id="date" name="date" value="<%= movies.releaseDate ? new Date(movies.releaseDate).toISOString().slice(0,10) : '' %>" required>
         </div>
 
         <div class="mb-3">
