@@ -61,35 +61,40 @@
 <!-- Movies -->
 <div class="container py-5">
   <h2 class="mb-4">Movies</h2>
+<% if (movies && movies.length > 0) { %>
   <div class="row">
     <% for (let i = 0; i < movies.length; i++) { %>
-        <div class="col-6 col-md-2 mb-4">
-        <img src="/images/<%= movies[i].image %>" class="img-fluid rounded" alt="<%= movies[i].name %>">
+      <div class="col-6 col-md-2 mb-4">
+        <% let imagePath = movies[i].image ? movies[i].image : 'default.jpg'; %>
+        <img src="/images/<%= imagePath %>" class="img-fluid rounded" alt="<%= movies[i].name %>">
         <h6 class="mt-2">Name: <%= movies[i].name %></h6>
         <h6 class="mt-2">Rating: <%= movies[i].rating %>⭐</h6>
         <h6>
-            Release Date:
-            <% 
+          Release Date:
+          <% 
             let rawDate = movies[i].releaseDate;
             if (typeof rawDate === 'string' && rawDate.startsWith('$')) {
-                rawDate = rawDate.slice(1); // Remove $ sign
+              rawDate = rawDate.slice(1);
             }
             const dateObj = new Date(rawDate);
-            const formattedDate = isNaN(dateObj) ? movies[i].releaseDate : dateObj.toLocaleDateString('en-GB');
-            %>
-            <%= formattedDate %>
+            const formattedDate = isNaN(dateObj) ? 'Unknown Date' : dateObj.toLocaleDateString('en-GB');
+          %>
+          <%= formattedDate %>
         </h6>
         <% if (user) { %>
-            <div class="d-flex flex-column gap-2 mt-2">
+          <div class="d-flex flex-column gap-2 mt-2">
             <a href="/updateMovie/<%= movies[i].movieID %>" class="btn btn-warning btn-sm">Edit</a>
             <form method="POST" action="/deleteMovie/<%= movies[i].movieID %>" onsubmit="return confirm('ARE U SURE YOU WANT TO DELETE THE ACTION PACKED MOVIE???')">
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
             </form>
-            </div>
+          </div>
         <% } %>
-        </div>
+      </div>
     <% } %>
-    </div>
+  </div>
+<% } else { %>
+  <p class="text-white text-center">No movies found.</p>
+<% } %>
 </div>
 
 
