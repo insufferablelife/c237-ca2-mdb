@@ -76,7 +76,7 @@ const checkAuthenticated = (req, res, next) => {
     if (req.session.user) {
         return next();
     } else {
-        req.flash('error', 'Please log in to start using MovieForum');
+        req.flash('error', 'Please log in to start using MoviX');
         res.redirect('/login');
     }
 };
@@ -162,7 +162,7 @@ app.post('/login', (req, res) => {
     if (results.length > 0) {
       req.flash('success', 'Login successful!');
     // Redirect based on role
-      if (user.role === 'admin') {
+      if (req.session.user.role === 'admin') {
       res.redirect('/admin');
       } else {
       res.redirect('/movieList');
