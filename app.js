@@ -325,7 +325,6 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
 });
 app.post('/updateMovie/:id', upload.single('image'), checkAuthenticated, checkTermed,  (req, res) => {
     const movieID = req.params.id;
-    const movieID = req.params.id;
     const userId = req.session.user.id;
     const isAdmin = req.session.user.role === 'admin';
     const { name, releaseDate, rating } = req.body;
