@@ -35,10 +35,11 @@
   
   <select name="rating">
     <option value="">All Ratings</option>
-    <option value="G" <%= ratingFilter === 'G' ? 'selected' : '' %>>G</option>
-    <option value="PG" <%= ratingFilter === 'PG' ? 'selected' : '' %>>PG</option>
-    <option value="PG-13" <%= ratingFilter === 'PG-13' ? 'selected' : '' %>>PG-13</option>
-    <option value="R" <%= ratingFilter === 'R' ? 'selected' : '' %>>R</option>
+    <option value="G" <%= ratingFilter === '1' ? 'selected' : '' %>>1</option>
+    <option value="PG" <%= ratingFilter === '2' ? 'selected' : '' %>>2</option>
+    <option value="PG-13" <%= ratingFilter === '3' ? 'selected' : '' %>>3</option>
+    <option value="R" <%= ratingFilter === '4' ? 'selected' : '' %>>4</option>
+    <option value="R" <%= ratingFilter === '5' ? 'selected' : '' %>>5</option>
   </select>
 
   <button type="submit">Search</button>
