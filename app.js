@@ -299,8 +299,8 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
     const userID = req.session.user.id; 
 
-    const sql = 'INSERT INTO movies (name, rating, releaseDate, image) VALUES (?, ?, ?, ?)';
-    db.query(sql , [name, rating, releaseDate, image], (error, results) => {
+    const sql = 'INSERT INTO movies (name, rating, releaseDate, image, userID) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql , [name, rating, releaseDate, image, userID], (error, results) => {
         if (error) {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
@@ -313,7 +313,7 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
 // Update -Zhafran
 app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res) => {
-    const movieID = req.params.movieID;
+    const movieID = req.params.id;
     const sql = 'SELECT * FROM movies WHERE movieID = ?';
     db.query(sql , [movieID], (error, results) => {
         if (error) throw error;
@@ -326,7 +326,7 @@ app.get('/updateMovie/:id',checkAuthenticated, checkAdmin, checkTermed,(req,res)
     });
 });
 app.post('/updateMovie/:id', checkAuthenticated, checkTermed, upload.single('image'), (req, res) => {
-    const movieID = req.params.movieID;
+    const movieID = req.params.id;
     const userID = req.session.user.userID;
     const isAdmin = req.session.user.role === 'admin';
     const { name, releaseDate, rating } = req.body;
@@ -366,7 +366,7 @@ app.post('/updateMovie/:id', checkAuthenticated, checkTermed, upload.single('ima
 
 //Delete -Zhafran
 app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
-    const movieID = req.params.movieID;
+    const movieID = req.params.id;
     const userID = req.session.userID;
     const isAdmin = req.session.user.role === 'admin';
 
