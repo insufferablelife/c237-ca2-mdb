@@ -19,11 +19,11 @@ const upload = multer({ storage: storage });
 
 // DB connection
 const db = mysql.createConnection({
-  host: 'ufehz6.h.filess.io',
-  user: 'C237CA2_oncesoftme',
-  password: '8ab269dcf1ddc72e20ff43b7eb35f5a72b30a879',
-  database: 'C237CA2_oncesoftme',
-  port: 61002
+  host: '127.0.0.1',
+  user: 'root',
+  password: 'RP738964$',
+  database: 'ca2',
+  port: 3306
 });
 db.connect((err) => {
   if (err) {
