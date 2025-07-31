@@ -299,8 +299,8 @@ app.post('/addMovie', upload.single('image'),  (req, res) => {
 
     const userID = req.session.user.id; 
 
-    const sql = 'INSERT INTO movies (name, rating, releaseDate, image, userID) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql , [name, rating, releaseDate, image, userID], (error, results) => {
+    const sql = 'INSERT INTO movies (name, rating, releaseDate, image) VALUES (?, ?, ?, ?)';
+    db.query(sql , [name, rating, releaseDate, image], (error, results) => {
         if (error) {
             console.error("Error adding movie:", error);
             res.status(500).send('Error adding movie');
@@ -398,7 +398,7 @@ app.post('/deleteMovie/:id', checkAuthenticated, checkTermed, (req, res) => {
 
 // yow sun - ban user
 app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const userID = req.params.userID;
+    const userID = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 1 WHERE userID = ?';
     db.query(sql, [userID], (error, results) => {
@@ -413,7 +413,7 @@ app.get('/banUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) 
 
 // yow sun - unban user
 app.get('/unbanUser/:id', checkAuthenticated, checkAdmin, checkTermed, (req, res) => {
-    const userID = req.params.userID;
+    const userID = req.params.id;
 
     const sql = 'UPDATE users SET isBanned = 0 WHERE userID = ?';
     db.query(sql, [userID], (error, results) => {
